@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://raw.githubusercontent.com/qarinai/qarinai/refs/heads/main/public/logo.png" alt="Qarīn.ai Logo" width="200" height="200"/>
+    <img src="https://raw.githubusercontent.com/qarinai/qarinai/refs/heads/main/public/logo2.png" alt="Qarīn.ai Logo" width="200" height="200"/>
     <br/>
     Qarīn.ai
 </h1>
@@ -7,6 +7,10 @@
 <h3 align="center">
     Your AI Companion
 </h3>
+
+<h6 align="center" style="color:red">
+[STILL UNDER DEVELOPMENT AND NOT READY FOR PRODUCTION USE]
+</h6>
 
 <p align="center">
     Create unlimited AI Chatbot Agents for your websites
