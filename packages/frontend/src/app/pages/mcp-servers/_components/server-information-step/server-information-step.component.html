@@ -1,0 +1,291 @@
+<div class="card">
+  <div class="flex flex-col gap-4">
+    <h2 class="text-xl font-semibold">Server Information</h2>
+    <form [formGroup]="serverForm">
+      <div class="flex flex-wrap gap-2">
+        <label for="serverName">Server Name <span class="text-red-500">*</span></label>
+        <input
+          type="text"
+          id="serverName"
+          formControlName="serverName"
+          placeholder="Server Name"
+          class="w-full p-inputtext"
+          pInputText
+          [ngClass]="{ 'ng-dirty': serverForm.get('serverName')?.touched && serverForm.get('serverName')?.invalid }"
+        />
+        <small
+          *ngIf="serverForm.get('serverName')?.touched && serverForm.get('serverName')?.errors?.['required']"
+          class="p-error block w-full"
+          >Server name is required</small
+        >
+        <small
+          *ngIf="serverForm.get('serverName')?.touched && serverForm.get('serverName')?.errors?.['minlength']"
+          class="p-error block w-full"
+          >Server name must be at least 3 characters</small
+        >
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <label for="serverDescription">Server Description</label>
+        <textarea
+          id="serverDescription"
+          formControlName="serverDescription"
+          placeholder="Server Description"
+          class="w-full p-inputtext"
+          pInputTextarea
+        ></textarea>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="flex flex-col gap-4">
+    <h2 class="text-xl font-semibold">Server URL <span class="text-red-500">*</span></h2>
+    @for (server of existingServers; track server.url) {
+      <div class="flex items-center gap-4">
+        <p-radiobutton
+          name="server"
+          [(ngModel)]="selectedServerUrl"
+          [value]="server.url"
+          (onClick)="onServerUrlChange()"
+          [inputId]="server.url"
+        ></p-radiobutton>
+        <label [for]="server.url">{{ server.url }}</label>
+      </div>
+    }
+    <div class="flex flex-col">
+      <div class="flex items-center gap-4">
+        <p-radiobutton
+          name="server"
+          [(ngModel)]="selectedServerUrl"
+          value="__other__"
+          inputId="customServerUrl"
+          (onClick)="onServerUrlChange()"
+        ></p-radiobutton>
+        <label for="customServerUrl" class="flex-shrink-0">Custom Server URL</label>
+      </div>
+
+      @if (selectedServerUrl === '__other__') {
+        <form [formGroup]="serverForm" class="w-full">
+          <div class="ml-8 mt-2 w-full">
+            <input
+              type="text"
+              id="customServerUrl"
+              formControlName="customServerUrl"
+              placeholder="Enter custom server URL (e.g., https://example.com)"
+              class="w-full p-inputtext"
+              pInputText
+              [ngClass]="{
+                'ng-dirty': serverForm.get('customServerUrl')?.touched && serverForm.get('customServerUrl')?.invalid
+              }"
+            />
+            <small
+              *ngIf="
+                serverForm.get('customServerUrl')?.touched && serverForm.get('customServerUrl')?.errors?.['required']
+              "
+              class="p-error block"
+              >Server URL is required</small
+            >
+            <small
+              *ngIf="
+                serverForm.get('customServerUrl')?.touched && serverForm.get('customServerUrl')?.errors?.['pattern']
+              "
+              class="p-error block"
+              >Please enter a valid URL (e.g., https://example.com)</small
+            >
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="flex flex-col gap-4">
+    <h2 class="text-xl font-semibold">Server Security & Authentication</h2>
+    <div class="flex gap-4">
+      <p-fieldset legend="Security Type" class="w-full" styleClass="flex items-center h-full">
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center gap-4">
+            <p-radiobutton
+              name="securityType"
+              [(ngModel)]="selectedSecurityType"
+              value="none"
+              inputId="securityNone"
+              (onClick)="onSecurityChange()"
+            ></p-radiobutton>
+            <label for="securityNone">None</label>
+          </div>
+          <div class="flex items-center gap-4">
+            <p-radiobutton
+              name="securityType"
+              [(ngModel)]="selectedSecurityType"
+              value="basic"
+              inputId="securityBasic"
+              (onClick)="onSecurityChange()"
+            ></p-radiobutton>
+            <label for="securityBasic">Basic Authentication</label>
+          </div>
+          <div class="flex items-center gap-4">
+            <p-radiobutton
+              name="securityType"
+              [(ngModel)]="selectedSecurityType"
+              value="bearer"
+              inputId="securityBearer"
+              (onClick)="onSecurityChange()"
+            ></p-radiobutton>
+            <label for="securityBearer">Bearer Authentication</label>
+          </div>
+        </div>
+      </p-fieldset>
+
+      @if (selectedSecurityType === 'basic' || selectedSecurityType === 'bearer') {
+        <p-fieldset legend="Credentials Type" class="w-full" styleClass="flex items-center h-full">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-4">
+              <p-radiobutton
+                name="credentialsType"
+                [(ngModel)]="selectedCredentialType"
+                value="static"
+                inputId="credentialStatic"
+                (onClick)="onSecurityChange()"
+              ></p-radiobutton>
+              <label for="credentialStatic">
+                Static
+                <span class="text-sm italic ml-5 text-muted-color">
+                  Value is constant and is provided in server creation (now)
+                </span>
+              </label>
+            </div>
+            <div class="flex items-center gap-4">
+              <p-radiobutton
+                name="credentialsType"
+                [(ngModel)]="selectedCredentialType"
+                value="dynamic"
+                inputId="credentialDynamic"
+                (onClick)="onSecurityChange()"
+              ></p-radiobutton>
+              <label for="credentialDynamic">
+                Dynamic
+                <span class="text-sm italic ml-5 text-muted-color">
+                  Value is provided at runtime using a tool call parameter (later)
+                </span>
+              </label>
+            </div>
+          </div>
+        </p-fieldset>
+      }
+
+      @if (selectedSecurityType === 'basic' && selectedCredentialType === 'static') {
+        <p-fieldset legend="Credentials" class="w-full">
+          <form [formGroup]="basicForm">
+            <div class="flex flex-col gap-2">
+              <label for="basicUsername">Username <span class="text-red-500">*</span></label>
+              <input
+                type="text"
+                id="basicUsername"
+                formControlName="username"
+                placeholder="Enter username"
+                class="w-full p-inputtext"
+                pInputText
+                [ngClass]="{ 'ng-dirty': basicForm.get('username')?.touched && basicForm.get('username')?.invalid }"
+              />
+              <small
+                *ngIf="basicForm.get('username')?.touched && basicForm.get('username')?.errors?.['required']"
+                class="p-error block"
+                >Username is required</small
+              >
+
+              <label for="basicPassword">Password <span class="text-red-500">*</span></label>
+              <input
+                type="password"
+                id="basicPassword"
+                formControlName="password"
+                placeholder="Enter password"
+                class="w-full p-inputtext"
+                pInputText
+                [ngClass]="{ 'ng-dirty': basicForm.get('password')?.touched && basicForm.get('password')?.invalid }"
+              />
+              <small
+                *ngIf="basicForm.get('password')?.touched && basicForm.get('password')?.errors?.['required']"
+                class="p-error block"
+                >Password is required</small
+              >
+            </div>
+          </form>
+        </p-fieldset>
+      } @else if (selectedSecurityType === 'basic' && selectedCredentialType === 'dynamic') {
+        <p-fieldset legend="Dynamic Credentials" class="w-full">
+          <p class="text-sm mb-2 italic text-muted-color">should be provided in each individual tool call</p>
+
+          <div class="flex flex-col gap-2">
+            <label for="basicDynamicUsername">Username Parameter</label>
+            <input
+              type="text"
+              id="basicDynamicUsername"
+              placeholder="Enter username parameter"
+              class="w-full p-inputtext"
+              pInputText
+              disabled
+              value="__auth_username__"
+            />
+            <label for="basicDynamicPassword">Password Parameter</label>
+            <input
+              type="text"
+              id="basicDynamicPassword"
+              placeholder="Enter password parameter"
+              class="w-full p-inputtext"
+              pInputText
+              disabled
+              value="__auth_password__"
+            />
+          </div>
+        </p-fieldset>
+      } @else if (selectedSecurityType === 'bearer' && selectedCredentialType === 'static') {
+        <p-fieldset legend="Bearer Token" class="w-full">
+          <form [formGroup]="bearerForm">
+            <div class="flex flex-col gap-2">
+              <label for="bearerToken">Token <span class="text-red-500">*</span></label>
+              <input
+                type="text"
+                id="bearerToken"
+                formControlName="token"
+                placeholder="Enter bearer token"
+                class="w-full p-inputtext"
+                pInputText
+                [ngClass]="{ 'ng-dirty': bearerForm.get('token')?.touched && bearerForm.get('token')?.invalid }"
+              />
+              <small
+                *ngIf="bearerForm.get('token')?.touched && bearerForm.get('token')?.errors?.['required']"
+                class="p-error block"
+                >Bearer token is required</small
+              >
+            </div>
+          </form>
+        </p-fieldset>
+      } @else if (selectedSecurityType === 'bearer' && selectedCredentialType === 'dynamic') {
+        <p-fieldset legend="Dynamic Bearer Token" class="w-full">
+          <p class="text-sm mb-2 italic text-muted-color">should be provided in each individual tool call</p>
+          <div class="flex flex-col gap-2">
+            <label for="bearerDynamicToken">Token Parameter</label>
+            <input
+              type="text"
+              id="bearerDynamicToken"
+              placeholder="Enter token parameter"
+              class="w-full p-inputtext"
+              pInputText
+              disabled
+              value="__auth_token__"
+            />
+          </div>
+        </p-fieldset>
+      }
+    </div>
+  </div>
+</div>
+
+<p-message
+  *ngIf="!serverForm.valid"
+  severity="warn"
+  text="Please fill in all required fields correctly before proceeding"
+></p-message>

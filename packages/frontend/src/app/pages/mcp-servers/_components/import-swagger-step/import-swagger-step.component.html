@@ -1,0 +1,58 @@
+<div class="card flex flex-col">
+  <div class="w-full">
+    <!-- swagger.json link -->
+    <div class="flex flex-wrap gap-2">
+      <label for="swaggerurl"
+        ><span>Link For swagger.json file</span>
+        <app-info-help infoMdFile="swagger-json"></app-info-help>
+      </label>
+      <form [formGroup]="swaggerForm" class="w-full">
+        <p-inputgroup>
+          <input
+            type="text"
+            id="swaggerurl"
+            pInputText
+            class="w-full"
+            formControlName="swaggerUrl"
+            placeholder="https://example.com/swagger.json"
+            [ngClass]="{ 'ng-dirty': swaggerForm.get('swaggerUrl')?.touched && swaggerForm.get('swaggerUrl')?.invalid }"
+          />
+          <p-inputgroup-addon>
+            <p-button
+              label="Fetch"
+              icon="pi pi-check"
+              (onClick)="onFetchSwaggerByUrlClick()"
+              [disabled]="swaggerForm.get('swaggerUrl')?.invalid && swaggerForm.get('swaggerUrl')?.touched"
+            ></p-button>
+          </p-inputgroup-addon>
+        </p-inputgroup>
+        <small
+          *ngIf="swaggerForm.get('swaggerUrl')?.touched && swaggerForm.get('swaggerUrl')?.invalid"
+          class="p-error block mt-1"
+          >Please enter a valid URL</small
+        >
+      </form>
+    </div>
+  </div>
+  <div class="w-full">
+    <p-divider layout="horizontal" class="flex" align="center"> OR </p-divider>
+  </div>
+  <div class="w-full">
+    <!-- upload swagger.json file -->
+    <p-fileupload
+      mode="advanced"
+      chooseLabel="Select a swagger.json file"
+      chooseIcon="pi pi-upload"
+      accept=".json"
+      [showUploadButton]="false"
+      [customUpload]="true"
+      [multiple]="false"
+      [auto]="true"
+      (onSelect)="onFileSelected($event)"
+    >
+      <ng-template #empty>
+        <div>Drag and drop files to upload</div>
+      </ng-template>
+    </p-fileupload>
+  </div>
+</div>

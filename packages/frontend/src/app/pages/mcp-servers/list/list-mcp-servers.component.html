@@ -1,0 +1,78 @@
+<p-toolbar styleClass="mb-6">
+  <ng-template #start>
+    <p-button label="Add" icon="pi pi-plus" severity="primary" class="mr-2" (onClick)="onAddServerClick()"></p-button>
+  </ng-template>
+</p-toolbar>
+
+<p-table
+  #dt
+  [value]="mcpServers()"
+  [loading]="isLoading()"
+  [columns]="[]"
+  [paginator]="false"
+  [rowHover]="true"
+  [dataKey]="'id'"
+>
+  <ng-template #caption>
+    <div class="flex items-center justify-between">
+      <h5 class="m-0">Manage Mcp Servers</h5>
+    </div>
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Type</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-server>
+    <tr>
+      <td>{{ server.name }}</td>
+      <td>{{ server.description }}</td>
+      <td>
+        <app-mcp-type [type]="server.type"></app-mcp-type>
+      </td>
+      <td>
+        @if (server.isActive) {
+          <p-tag value="Active" severity="success"></p-tag>
+        } @else {
+          <p-tag value="Inactive" severity="danger"></p-tag>
+        }
+      </td>
+      <td>
+        <p-button
+          icon="pi pi-arrow-up-right"
+          outlined
+          severity="primary"
+          label="connect"
+          (onClick)="openConnectPopup(server)"
+        ></p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  [(visible)]="viewConnectPopup"
+  (onShow)="onConnectPopupShow()"
+  [modal]="true"
+  [dismissableMask]="true"
+  styleClass="min-w-[50%]"
+  header="Connect to MCP"
+>
+  <p>Mcp server url:</p>
+  <input
+    type="text"
+    id="mcpServerUrl"
+    pInputText
+    [value]="getMcpServerUrl()"
+    class="w-full"
+    readonly
+    autofocus
+    placeholder="Automatically focused"
+  />
+</p-dialog>

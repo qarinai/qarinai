@@ -1,0 +1,96 @@
+<p-toolbar styleClass="mb-6">
+  <ng-template #start>
+    <p-button label="Add" icon="pi pi-plus" severity="primary" class="mr-2" (onClick)="onAddAgentClick()"></p-button>
+  </ng-template>
+</p-toolbar>
+
+<p-table
+  #dt
+  [value]="agents()"
+  [loading]="isLoading()"
+  [columns]="[]"
+  [paginator]="false"
+  [rowHover]="true"
+  [dataKey]="'id'"
+>
+  <ng-template #caption>
+    <div class="flex items-center justify-between">
+      <h5 class="m-0">Manage Agents</h5>
+    </div>
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      <th>Name</th>
+      <th>Default Model</th>
+      <th>Linked Mcp Servers</th>
+      <th>Status</th>
+      <th class="w-96">Actions</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-agent>
+    <tr>
+      <td>{{ agent.name }}</td>
+      <td>{{ agent.defaultModel.name }}</td>
+      <td>
+        @for (server of agent.linkedMCPServers; track server.id) {
+          <p-tag [value]="server.name" class="mr-1"></p-tag>
+        }
+      </td>
+      <td>
+        <p-tag
+          [value]="agent.isActive ? 'Active' : 'Inactive'"
+          [severity]="agent.isActive ? 'success' : 'danger'"
+        ></p-tag>
+      </td>
+      <td>
+        <a
+          pButton
+          icon="pi pi-pencil"
+          outlined
+          class="mr-2"
+          [routerLink]="'/pages/agents/edit/' + agent.id"
+          label="Edit"
+        ></a>
+        <a
+          pButton
+          icon="pi pi-arrow-up-right"
+          outlined
+          label="Chat"
+          [routerLink]="'/chat'"
+          [queryParams]="{ agentId: agent.id }"
+          target="popup"
+          (click)="openChatWindow($event, agent)"
+        ></a>
+        <a
+          pButton
+          icon="pi pi-plus"
+          outlined
+          label="Add to Website"
+          (click)="openAddToWebsite($event, agent)"
+          class="ml-2"
+        ></a>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  [(visible)]="viewConnectPopup"
+  (onShow)="onConnectPopupShow()"
+  [modal]="true"
+  styleClass="win-w-[50%]"
+  [header]="'Add ' + (viewConnectAgent()?.name || 'Agent') + ' to your Website'"
+>
+  <p>Copy the following code snippet and paste it into your website's HTML to embed the chat widget:</p>
+  <textarea
+    type="text"
+    id="widgetText"
+    pInputText
+    [value]="getWidgetHtml()"
+    class="w-full"
+    readonly
+    autofocus
+  ></textarea>
+</p-dialog>

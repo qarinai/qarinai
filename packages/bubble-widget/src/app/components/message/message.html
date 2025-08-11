@@ -1,0 +1,22 @@
+<div
+  class="text-white p-2 rounded-lg rounded-bl-none mb-2 w-fit max-w-[90%]"
+  [ngClass]="{
+    'mr-auto': role() === 'assistant',
+    'ml-auto': role() === 'user',
+    'bg-cyan-600': role() === 'user',
+    'bg-zinc-700': role() === 'assistant',
+    'rounded-bl-none': role() === 'assistant',
+    'rounded-br-none': role() === 'user'
+  }"
+>
+  <!-- <p class="text-sm">
+    Hello! I'm Qarin.ai, your AI assistant. How can I assist you today?
+  </p> -->
+  @if (content(); as contentText) {
+  <markdown [data]="contentText" class="text-sm"></markdown>
+  } @else {
+  <p class="text-sm animate-spin">
+    <fa-icon [icon]="icons.spinner" />
+  </p>
+  }
+</div>

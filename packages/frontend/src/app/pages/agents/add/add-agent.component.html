@@ -1,0 +1,128 @@
+<div class="flex flex-col justify-center">
+  <div class="card w-full">
+    <h2 class="text-2xl font-semibold mb-6">
+      @if (isEditMode()) {
+        Edit Agent
+      } @else {
+        Add Agent
+      }
+    </h2>
+
+    <form [formGroup]="agentForm" class="flex flex-col gap-8">
+      <div class="flex w-full flex-col gap-4">
+        <label for="name">
+          <span>Name</span>
+          <app-info-help infoMdFile="agent-name"></app-info-help>
+        </label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          class="w-full"
+          [class.ng-invalid]="agentForm.get('name')?.invalid && agentForm.get('name')?.touched"
+        />
+        <small *ngIf="agentForm.get('name')?.invalid && agentForm.get('name')?.touched" class="p-error">
+          Name is required and must be at least 3 characters
+        </small>
+      </div>
+      <div class="flex w-full flex-col gap-4">
+        <label for="description">Short Description</label>
+        <textarea
+          id="description"
+          pInputTextarea
+          formControlName="description"
+          rows="2"
+          class="w-full"
+          [class.ng-invalid]="agentForm.get('description')?.invalid && agentForm.get('description')?.touched"
+        ></textarea>
+        <small *ngIf="agentForm.get('description')?.invalid && agentForm.get('description')?.touched" class="p-error">
+          Description is required and must be at least 10 characters and max 120 characters
+        </small>
+      </div>
+      <div class="flex w-full flex-col gap-4">
+        <label for="identity-message">
+          <span> Identity Message </span>
+          <app-info-help infoMdFile="agent-identity"></app-info-help>
+        </label>
+        <textarea
+          id="identity-message"
+          pInputTextarea
+          formControlName="identityMessage"
+          rows="4"
+          placeholder="Describe the agent's identity and role in the conversation"
+          class="w-full"
+          [class.ng-invalid]="agentForm.get('identityMessage')?.invalid && agentForm.get('identityMessage')?.touched"
+        ></textarea>
+        <small
+          *ngIf="agentForm.get('identityMessage')?.invalid && agentForm.get('identityMessage')?.touched"
+          class="p-error"
+        >
+          Identity message is required and must be at least 50 characters
+        </small>
+      </div>
+      <div class="flex w-full flex-col gap-4">
+        <label for="system-message">
+          <span> Additional System Instructions </span>
+          <app-info-help infoMdFile="agent-instructions"></app-info-help>
+        </label>
+        <textarea
+          id="system-message"
+          pInputTextarea
+          placeholder="Provide any additional system instructions or context for the agent"
+          formControlName="systemMessage"
+          rows="4"
+          class="w-full"
+        ></textarea>
+      </div>
+      <div class="flex w-full flex-col gap-4">
+        <label>Default Model</label>
+        <p-select
+          [options]="chatProviders()"
+          [group]="true"
+          formControlName="defaultModelId"
+          [loading]="isLoadingModels()"
+          optionGroupChildren="models"
+          optionGroupLabel="name"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Select Default Model"
+        ></p-select>
+      </div>
+
+      @if (agentFormValue().defaultModelId) {
+        <div class="flex w-full flex-col gap-4">
+          <label>Additional Allowed Models</label>
+          <p-multiselect
+            [options]="additionalAllowedModels()"
+            [group]="true"
+            formControlName="allowedModelIds"
+            [loading]="isLoadingModels()"
+            optionGroupChildren="models"
+            optionGroupLabel="name"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Select Additional Allowed Models"
+            display="chip"
+          ></p-multiselect>
+        </div>
+      }
+
+      <div class="flex w-full flex-col gap-4">
+        <label>Linked MCP Servers</label>
+        <p-multiselect
+          [options]="mcpServers()"
+          formControlName="linkedMcpServerIds"
+          optionLabel="name"
+          optionValue="id"
+          display="chip"
+          placeholder="Select MCP Servers"
+        ></p-multiselect>
+      </div>
+    </form>
+  </div>
+
+  <div class="flex w-full justify-end mt-4">
+    <p-button label="Save Agent" icon="pi pi-save" (onClick)="saveAgent()" [disabled]="agentForm.invalid"></p-button>
+  </div>
+</div>

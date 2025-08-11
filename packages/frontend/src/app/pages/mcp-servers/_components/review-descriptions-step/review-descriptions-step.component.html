@@ -1,0 +1,88 @@
+<p-message severity="info" icon="pi pi-info-circle">
+  Make sure to review all descriptions of all endpoints and parameters before submitting. <br />
+  The descriptions help the model to understand the context and provide better responses.
+</p-message>
+
+<div class="mt-8"></div>
+
+<div class="mt-4">
+  @if (!isAllFormsValid()) {
+    <p-message severity="warn" text="Please fill in all required descriptions before proceeding"></p-message>
+  }
+</div>
+
+@for (endpoint of endpoints; track endpoint.id; let i = $index) {
+  <div class="card mt-4">
+    <h2 class="text-xl font-semibold">
+      <p-tag severity="secondary" class="inline-block mr-4 w-20" [value]="endpoint.method | uppercase"></p-tag>
+      <span class="font-mono font-light text-muted-color">
+        {{ endpoint.path }}
+      </span>
+    </h2>
+
+    <form [formGroup]="endpointForms[i]">
+      <div class="flex flex-col gap-2">
+        <label [for]="'description-' + i">Description <span class="text-red-500">*</span></label>
+        <textarea
+          [id]="'description-' + i"
+          pInputTextarea
+          rows="1"
+          cols="30"
+          class="w-full"
+          formControlName="description"
+          placeholder="Enter description for this endpoint"
+          [ngClass]="{
+            'ng-dirty': endpointForms[i].get('description')?.touched && endpointForms[i].get('description')?.invalid
+          }"
+        ></textarea>
+        <small
+          *ngIf="
+            endpointForms[i].get('description')?.touched && endpointForms[i].get('description')?.errors?.['required']
+          "
+          class="p-error block"
+          >Description is required</small
+        >
+      </div>
+
+      <p-divider></p-divider>
+
+      <div class="flex gap-4">
+        @for (groupName of paramGroups; track groupName) {
+          @if (doesHaveParams(endpoint.toolData?.[groupName])) {
+            <p-fieldset [legend]="paramLegends[groupName]" class="w-full">
+              @for (param of getIterableParams(endpoint, groupName); track param.key) {
+                <div class="flex flex-col gap-2 mb-4" *ngIf="getParamForm(endpointForms[i], groupName, param.key)">
+                  <label [for]="groupName + '-' + i + '-' + param.key"
+                    >{{ param.key }} <span class="text-red-500">*</span></label
+                  >
+                  <textarea
+                    [id]="groupName + '-' + i + '-' + param.key"
+                    pInputTextarea
+                    rows="1"
+                    cols="30"
+                    class="w-full"
+                    [formControl]="getParamFormControl(endpointForms[i], groupName, param.key, 'description')"
+                    placeholder="Enter description for this parameter"
+                    [ngClass]="{
+                      'ng-dirty':
+                        getParamForm(endpointForms[i], groupName, param.key).get('description')?.touched &&
+                        getParamForm(endpointForms[i], groupName, param.key).get('description')?.invalid
+                    }"
+                  ></textarea>
+                  <small
+                    *ngIf="
+                      getParamForm(endpointForms[i], groupName, param.key).get('description')?.touched &&
+                      getParamForm(endpointForms[i], groupName, param.key).get('description')?.errors?.['required']
+                    "
+                    class="p-error block"
+                    >Description is required</small
+                  >
+                </div>
+              }
+            </p-fieldset>
+          }
+        }
+      </div>
+    </form>
+  </div>
+}

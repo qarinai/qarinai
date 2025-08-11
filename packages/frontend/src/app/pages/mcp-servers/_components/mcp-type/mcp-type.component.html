@@ -1,0 +1,11 @@
+@switch (type()) {
+  @case (Type.McpProxy) {
+    <p-tag value="MCP Proxy" severity="info"></p-tag>
+  }
+  @case (Type.Swagger) {
+    <p-tag value="Swagger" severity="success"></p-tag>
+  }
+  @case (Type.VectorStore) {
+    <p-tag value="Vector Store" severity="warning"></p-tag>
+  }
+}

@@ -1,0 +1,9 @@
+<div class="bg-[var(--surface-card)] p-4 rounded-lg">
+  @if (loading()) {
+    <p-skeleton width="75%" height="1rem" class="block"></p-skeleton>
+    <p-skeleton width="2rem" height="2rem" class="flex justify-end"></p-skeleton>
+  } @else {
+    <div class="text-normal">{{ title() }}</div>
+    <div class="text-4xl font-bold text-right">{{ value() }}</div>
+  }
+</div>

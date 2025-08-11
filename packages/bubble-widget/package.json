@@ -1,0 +1,61 @@
+{
+  "name": "qarinai-bubble-widget",
+  "version": "0.0.0-dev",
+  "author": {
+    "name": "Sayed Mahmoud Sayed",
+    "email": "sayedmsayed266+qarinai@gmail.com",
+    "url": "https://sayedmahmoud266.website"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qarinai/qarinai"
+  },
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --port 4210",
+    "build": "ng build",
+    "build:prod": "ng build -c production",
+    "bundle": "webpack --config webpack.config.js",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "dependencies": {
+    "@angular/common": "^20.0.0",
+    "@angular/compiler": "^20.0.0",
+    "@angular/core": "^20.0.0",
+    "@angular/elements": "^20.1.4",
+    "@angular/forms": "^20.0.0",
+    "@angular/platform-browser": "^20.0.0",
+    "@angular/router": "^20.0.0",
+    "@fortawesome/angular-fontawesome": "3",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@ngx-env/builder": "^20.1.1",
+    "@tailwindcss/postcss": "^4.1.11",
+    "css-loader": "^7.1.2",
+    "marked": "^16.1.2",
+    "ngx-markdown": "^20.0.0",
+    "postcss": "^8.5.6",
+    "rxjs": "~7.8.0",
+    "style-loader": "^4.0.0",
+    "tailwindcss": "^4.1.11",
+    "tslib": "^2.3.0",
+    "webpack": "^5.101.0",
+    "webpack-cli": "^6.0.1"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.0.2",
+    "@angular/cli": "^20.0.2",
+    "@angular/compiler-cli": "^20.0.0",
+    "@types/jasmine": "~5.1.0",
+    "jasmine-core": "~5.7.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "ng-packagr": "^20.1.0",
+    "typescript": "~5.8.2"
+  }
+}

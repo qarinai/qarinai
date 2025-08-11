@@ -1,0 +1,53 @@
+<div class="w-100 flex flex-col h-svh">
+  <!-- header -->
+  <header class="w-100 flex h-24 bg-surface-900 flex-shrink-0 flex-grow-0 items-center p-4">
+    <h1 class="text-gradient">{{ agent().name }}</h1>
+  </header>
+
+  <main
+    id="chat-list"
+    class="w-100 flex flex-col flex-shrink-0 flex-grow gap-4 bg-surface-950 px-16 py-8 chat-pane overflow-y-auto"
+  >
+    @for (message of messages; track message.id) {
+      @if (message.role === 'user') {
+        <div class="msg-user flex justify-end w-full">
+          <div class="p-4 bg-cyan-400 rounded-3xl rounded-br-none max-w-[80%] text-surface-950">
+            <markdown [data]="message.content"></markdown>
+          </div>
+        </div>
+      } @else {
+        <div class="msg-agent flex justify-start w-full">
+          <div class="p-4 bg-surface-800 rounded-3xl rounded-bl-none max-w-[80%] text-surface-100">
+            <markdown [data]="message.content"></markdown>
+          </div>
+        </div>
+      }
+    }
+    @if (messages.length > 0 && messages[messages.length - 1].role === 'user') {
+      <div class="msg-loading flex justify-start w-full">
+        <div class="p-4 bg-surface-300 rounded-3xl rounded-bl-none text-surface-950 flex gap-2">
+          <div class="flex items-center justify-center">
+            <i class="pi pi-spinner animate-spin"></i>
+          </div>
+          <p class="animate-pulse">Loading...</p>
+        </div>
+      </div>
+    }
+  </main>
+
+  <footer class="w-100 flex bg-surface-900 min-h-24 flex-shrink-0">
+    <form class="w-full flex gap-4 p-4" [formGroup]="form" (ngSubmit)="submit()">
+      <textarea
+        placeholder="Hello, How may i help you?"
+        name="content"
+        formControlName="content"
+        id="msg"
+        class="w-full h-full bg-surface-800 rounded p-2"
+        (keypress)="onTextareaKeyPress($event)"
+      ></textarea>
+      <button type="submit" class="rounded hover:bg-surface-800 transition-colors duration-300 py-4 px-8">
+        <i class="pi pi-send text-surface-100 text-4xl"></i>
+      </button>
+    </form>
+  </footer>
+</div>

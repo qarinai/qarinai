@@ -1,0 +1,66 @@
+<div class="flex flex-col justify-center">
+  <p-card>
+    <h2 class="text-2xl font-semibold mb-6">Add Personal Access Token</h2>
+
+    <form [formGroup]="accessTokenForm" class="flex flex-col gap-8">
+      <div class="flex w-full flex-col gap-4">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          placeholder="Enter token name"
+          class="w-full"
+          [class.ng-invalid]="accessTokenForm.get('name')?.invalid && accessTokenForm.get('name')?.touched"
+        />
+        <small *ngIf="accessTokenForm.get('name')?.invalid && accessTokenForm.get('name')?.touched" class="p-error">
+          Name is required
+        </small>
+      </div>
+      <div class="flex w-full flex-col gap-4">
+        <label for="expirationDate">Expiration Date</label>
+        <p-datepicker
+          inputId="expirationDate"
+          formControlName="expirationDate"
+          placeholder="Select expiration date"
+          [showIcon]="true"
+          class="w-full"
+          [styleClass]="'w-full'"
+          [iconDisplay]="'input'"
+          [showOnFocus]="false"
+          [minDate]="minDate"
+          [class.ng-invalid]="
+            accessTokenForm.get('expirationDate')?.invalid && accessTokenForm.get('expirationDate')?.touched
+          "
+        ></p-datepicker>
+        <small
+          *ngIf="accessTokenForm.get('expirationDate')?.invalid && accessTokenForm.get('expirationDate')?.touched"
+          class="p-error"
+        >
+          Expiration date is required
+        </small>
+      </div>
+      <div class="flex w-full justify-end">
+        <p-button label="Create Token" icon="pi pi-check" severity="primary" (onClick)="onCreateClick()"></p-button>
+      </div>
+    </form>
+  </p-card>
+</div>
+
+<p-dialog
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [dismissableMask]="true"
+  styleClass="min-w-[50%]"
+  header="Token Created"
+  (onShow)="onDialogShow()"
+  (onHide)="onDialogHide()"
+>
+  <p>Personal Access Token created successfully!</p>
+  <p>Token:</p>
+  <input id="createdTokenText" type="text" pInputText [value]="createdToken()" readonly class="w-full mb-4" />
+  <div class="flex justify-end">
+    <p-button label="Close" icon="pi pi-times" severity="secondary" (onClick)="dialogVisible.set(false)"></p-button>
+  </div>
+</p-dialog>

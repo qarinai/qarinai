@@ -1,0 +1,82 @@
+<p-card [header]="vectorStoreDetails()?.name" [subheader]="vectorStoreDetails()?.summary" [styleClass]="'relative'">
+  <p-tag severity="primary" [value]="vectorStoreDetails()?.status" class="absolute top-4 right-4"></p-tag>
+  <app-info-help infoMdFile="vector-store-usage" class="absolute top-5 right-28"></app-info-help>
+  <p-table
+    #dt
+    [columns]="[]"
+    [rowHover]="false"
+    [dataKey]="'id'"
+    [paginator]="false"
+    [value]="vectorStoreDetails()?.sources ?? []"
+  >
+    <ng-template #caption>
+      <div class="flex items-center justify-between">
+        <span class="text-xl font-bold">Sources</span>
+        <div class="flex gap-4">
+          @if (!vectorStoreDetails()?.mcpServer) {
+            <p-button icon="pi pi-server" rounded raised label="Create MCP" (onClick)="createMcpServer()" />
+          }
+          <p-button icon="pi pi-file" rounded raised label="How To Use" (onClick)="showHowToUseDialog()" />
+          <p-button icon="pi pi-plus" rounded raised label="Add New Source" (onClick)="showAddSourceDialog()" />
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #header>
+      <tr>
+        <th>Name</th>
+        <th>Summary</th>
+        <th class="w-24">Type</th>
+        <th class="w-32">Status</th>
+        <th class="w-32">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-source>
+      <tr>
+        <td>{{ source.name }}</td>
+        <td>
+          {{ source.summary?.length > 100 ? (source.summary | slice: 0 : 100) + '...' : source.summary }}
+        </td>
+        <td>{{ source.type }}</td>
+        <td>{{ source.status }}</td>
+        <td>
+          <p-button icon="pi pi-eye" rounded outlined class="mr-2" />
+          <p-button icon="pi pi-trash" rounded outlined severity="danger" />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
+
+<!-- add source dialog -->
+
+<p-dialog
+  [(visible)]="addSourceVisible"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [header]="'Add Source'"
+  [closable]="false"
+  [dismissableMask]="true"
+  [resizable]="false"
+  [draggable]="false"
+  [closeOnEscape]="false"
+  (onHide)="hideAddSourceDialog()"
+  #dialog
+>
+  <app-add-source [dialogRef]="dialog" [storeId]="vectorStoreId"></app-add-source>
+</p-dialog>
+
+<p-dialog
+  [modal]="true"
+  [(visible)]="howToUseVisible"
+  [dismissableMask]="true"
+  [showHeader]="false"
+  [style]="{ minWidth: '40vw', maxWidth: '50vw', padding: '1rem' }"
+>
+  <markdown [data]="howToUseText()"></markdown>
+
+  <div class="flex justify-end mt-4">
+    <p-button label="Ok Got it!" (onClick)="howToUseVisible.set(false)"></p-button>
+  </div>
+</p-dialog>

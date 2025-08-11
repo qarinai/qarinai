@@ -1,0 +1,23 @@
+@if (isLoading()) {
+  <div class="flex w-100 h-lvh items-center justify-center">
+    <p-progressspinner ariaLabel="Loading" class="spinner-colors"></p-progressspinner>
+
+    <footer class="w-100 flex absolute bottom-0 min-h-12 flex-shrink-0">
+      <p>Powered By <a href="https://qarin.ai" target="_blank" rel="noopener noreferrer">Qarīn.ai</a></p>
+    </footer>
+  </div>
+}
+
+@if (isError()) {
+  <div class="flex flex-col w-100 h-lvh items-center justify-center">
+    <img class="max-h-24" src="/images/link-broken.svg" alt="Link Broken" />
+    <p>Error loading chat. Please try again later.</p>
+    <footer class="w-100 flex absolute bottom-0 min-h-12 flex-shrink-0">
+      <p>Powered By <a href="https://qarin.ai" target="_blank" rel="noopener noreferrer">Qarīn.ai</a></p>
+    </footer>
+  </div>
+}
+
+@if (isConversationOpen() && agent(); as loadedAgent) {
+  <app-conversation [agent]="loadedAgent"></app-conversation>
+}

@@ -1,0 +1,17 @@
+<div class="grid grid-cols-12 gap-8">
+  <div class="col-span-12 xl:col-span-4">
+    <div class="card">
+      <p-chart type="bar" [data]="messagesChartData()" [options]="messagesChartOptions()"></p-chart>
+    </div>
+  </div>
+  <div class="col-span-12 xl:col-span-4">
+    <div class="card">
+      <p-chart type="bar" [data]="conversationsChartData()" [options]="conversationsChartOptions()"></p-chart>
+    </div>
+  </div>
+  <div class="col-span-12 xl:col-span-4">
+    <div class="card">
+      <p-chart type="bar" [data]="tokensChartData()" [options]="tokensChartOptions()"></p-chart>
+    </div>
+  </div>
+</div>

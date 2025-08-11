@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "monorepo": false,
+  "compilerOptions": {
+    "tsConfigPath": "tsconfig.build.json",
+    "assets": [
+      {
+        "include": "public/**/*",
+        "outDir": "dist/public"
+      }
+    ]
+  }
+}

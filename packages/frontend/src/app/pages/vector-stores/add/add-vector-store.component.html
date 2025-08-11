@@ -1,0 +1,46 @@
+<div class="card p-4">
+  <h2 class="text-2xl font-semibold mb-6">Add Vector Store</h2>
+
+  <div class="grid">
+    <div class="col-12">
+      <form [formGroup]="vectorStoreForm" class="flex flex-wrap gap-4">
+        <div class="field w-full">
+          <label for="name" class="block font-medium mb-2">Name <span class="text-red-500">*</span></label>
+          <input
+            id="name"
+            type="text"
+            pInputText
+            formControlName="name"
+            class="w-full"
+            [class.ng-invalid]="vectorStoreForm.get('name')?.invalid && vectorStoreForm.get('name')?.touched"
+          />
+          <small *ngIf="vectorStoreForm.get('name')?.invalid && vectorStoreForm.get('name')?.touched" class="p-error">
+            Name is required
+          </small>
+        </div>
+
+        <div class="field w-full">
+          <label for="summary" class="block font-medium mb-2">Summary <span class="text-red-500">*</span></label>
+          <textarea
+            id="summary"
+            pInputText
+            formControlName="summary"
+            class="w-full"
+            rows="4"
+            [class.ng-invalid]="vectorStoreForm.get('summary')?.invalid && vectorStoreForm.get('summary')?.touched"
+          ></textarea>
+          <small
+            *ngIf="vectorStoreForm.get('summary')?.invalid && vectorStoreForm.get('summary')?.touched"
+            class="p-error"
+          >
+            Summary is required
+          </small>
+        </div>
+
+        <div class="flex w-full justify-end mt-4">
+          <p-button label="Save" icon="pi pi-save" severity="primary" (onClick)="save()"></p-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="card flex flex-col gap-8">
+  <div class="flex items-center gap-4">
+    <p-checkbox
+      [binary]="true"
+      [(ngModel)]="selectAll"
+      inputId="select-all"
+      [indeterminate]="isIndeterminate"
+      (onChange)="onSelectAllChange($event)"
+    ></p-checkbox>
+    <label for="select-all">Select All</label>
+  </div>
+
+  @for (endpoint of allEndpoints; track endpoint.id) {
+    <div class="flex items-center gap-4">
+      <p-checkbox
+        [value]="endpoint.id"
+        [(ngModel)]="selectedEndpointIds"
+        [inputId]="endpoint.id"
+        (onChange)="onEndpointSelectChange()"
+      ></p-checkbox>
+      <label [for]="endpoint.id">
+        <p-tag
+          [rounded]="false"
+          [severity]="methodsSeverityMap[endpoint.method.toLowerCase()]"
+          [value]="endpoint.method.toUpperCase()"
+          class="mr-2"
+        />
+        {{ endpoint.path }}
+      </label>
+    </div>
+  }
+</div>

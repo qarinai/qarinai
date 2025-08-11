@@ -1,0 +1,11 @@
+.chat-pane {
+  max-height: calc(100vh - 12rem);
+}
+
+::ng-deep {
+  .thinking {
+    color: var(--surface-800);
+    font-style: italic;
+    font-weight: 300;
+  }
+}

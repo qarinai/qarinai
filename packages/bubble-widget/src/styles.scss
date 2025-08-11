@@ -1,0 +1,76 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "./tailwind.css";
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer {
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    display: block;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: max(100%, 100px);
+    transform: translateX(-100%);
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer 1.5s infinite;
+    z-index: 9999999999999999999;
+  }
+}
+
+markdown {
+  ul,
+  ol {
+    padding-left: 1.5rem;
+    margin-bottom: 2rem;
+
+    &:has(> li > ul),
+    &:has(> li > ol) {
+      & > li > ul,
+      & > li > ol {
+        margin-bottom: 0;
+      }
+    }
+  }
+  ul > li {
+    list-style-type: disc;
+  }
+
+  ol > li {
+    list-style-type: decimal;
+  }
+
+  code {
+    background-color: var(--p-surface-950);
+    display: block;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+  }
+
+  *:has(code) {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+  }
+
+  a {
+    text-decoration: underline;
+    color: var(--p-primary-color);
+    font-style: italic;
+  }
+}

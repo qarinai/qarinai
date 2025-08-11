@@ -1,0 +1,14 @@
+<div class="grid grid-cols-12 gap-8">
+  <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+    <app-number-card [loading]="loading()" title="Chat Providers" [value]="stats()?.chatProviders"></app-number-card>
+  </div>
+  <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+    <app-number-card [loading]="loading()" title="Agents" [value]="stats()?.agents"></app-number-card>
+  </div>
+  <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+    <app-number-card [loading]="loading()" title="MCP Servers" [value]="stats()?.mcpServers"></app-number-card>
+  </div>
+  <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+    <app-number-card [loading]="loading()" title="Vector Stores" [value]="stats()?.vectorStores"></app-number-card>
+  </div>
+</div>

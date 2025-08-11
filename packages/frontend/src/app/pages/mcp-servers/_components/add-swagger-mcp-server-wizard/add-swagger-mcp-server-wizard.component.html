@@ -1,0 +1,91 @@
+<div class="flex justify-center">
+  <p-stepper [linear]="true" [value]="currentStep" class="w-full">
+    <div class="card" style="margin-bottom: 0">
+      <p-step-list>
+        <p-step [value]="1">Import Swagger/OpenAPI File</p-step>
+        <p-step [value]="2">Select Endpoints</p-step>
+        <p-step [value]="3">Server Information</p-step>
+        <p-step [value]="4">Review Descriptions</p-step>
+      </p-step-list>
+    </div>
+
+    <p-step-panels>
+      <p-step-panel [value]="1">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex flex-col">
+            <div class="step-content">
+              <app-import-swagger-step (onValidChange)="onImportSwaggerValid($event)"></app-import-swagger-step>
+            </div>
+            <div class="flex pt-6 justify-end">
+              <p-button
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                [disabled]="!stepValidations.importSwagger"
+                (onClick)="onNextClick(2)"
+              ></p-button>
+            </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+      <p-step-panel [value]="2">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex flex-col">
+            <div class="step-content">
+              <app-select-endpoints-step (onValidChange)="onSelectEndpointsValid($event)"></app-select-endpoints-step>
+            </div>
+            <div class="flex pt-6 justify-between">
+              <p-button label="Previous" icon="pi pi-arrow-left" iconPos="left" (onClick)="currentStep = 1"></p-button>
+              <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="onNextClick(3)"></p-button>
+            </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+      <p-step-panel [value]="3">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex flex-col">
+            <div class="step-content">
+              <app-server-information-step
+                (onValidChange)="onServerInformationValid($event)"
+              ></app-server-information-step>
+            </div>
+            <div class="flex pt-6 justify-between">
+              <p-button label="Previous" icon="pi pi-arrow-left" iconPos="left" (onClick)="currentStep = 2"></p-button>
+              <p-button
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                [disabled]="!stepValidations.serverInformation"
+                (onClick)="onNextClick(4)"
+              ></p-button>
+            </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+
+      <p-step-panel [value]="4">
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex flex-col">
+            <div class="step-content">
+              <app-review-descriptions-step
+                (onValidChange)="onReviewDescriptionsValid($event)"
+              ></app-review-descriptions-step>
+            </div>
+            <div class="flex pt-6 justify-between">
+              <p-button label="Previous" icon="pi pi-arrow-left" iconPos="left" (onClick)="currentStep = 3"></p-button>
+              <p-button
+                label="Create Server"
+                icon="pi pi-check"
+                iconPos="right"
+                [disabled]="!stepValidations.reviewDescriptions"
+                (onClick)="onCreateServerClick()"
+              ></p-button>
+            </div>
+          </div>
+        </ng-template>
+      </p-step-panel>
+    </p-step-panels>
+  </p-stepper>
+</div>

@@ -1,0 +1,41 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Settings</h3>
+  </div>
+  <form [formGroup]="settingsForm" class="card-body flex flex-col gap-4">
+    <div class="input-field flex flex-col gap-1">
+      <label for="defaultChatProvider">Default Chat Provider</label>
+      <p-select
+        formControlName="defaultChatProvider"
+        id="defaultChatProvider"
+        placeholder="Select a provider"
+        class="w-full"
+        [options]="chatProviders()"
+        optionLabel="name"
+        optionValue="id"
+        [loading]="allLoading()"
+      ></p-select>
+    </div>
+
+    <div class="input-field flex flex-col gap-1">
+      <label for="defaultChatModel">Default Chat Model</label>
+      <p-select
+        formControlName="defaultChatModel"
+        id="defaultChatModel"
+        placeholder="Select a model"
+        class="w-full"
+        [options]="chatProviders()"
+        [group]="true"
+        optionLabel="name"
+        optionValue="id"
+        optionGroupLabel="name"
+        optionGroupChildren="models"
+        [loading]="allLoading()"
+      ></p-select>
+    </div>
+
+    <div class="flex justify-end mt-4">
+      <p-button label="Save Settings" type="submit" (onClick)="saveSettings()"></p-button>
+    </div>
+  </form>
+</div>
