@@ -13,6 +13,7 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
+    "prebuild": "rm -rf dist && rm -rf public/*",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

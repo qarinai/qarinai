@@ -15,6 +15,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4210",
+    "prebuild:prod": "rm -rf dist",
     "build": "ng build",
     "build:prod": "ng build -c production",
     "bundle": "webpack --config webpack.config.js",

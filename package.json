@@ -1,0 +1,35 @@
+{
+  "name": "qarinai",
+  "version": "0.0.0-dev",
+  "description": "A monorepo for QarinAI projects",
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend",
+    "packages/bubble-widget"
+  ],
+  "scripts": {
+    "build": "gulp",
+    "start:prod": "node packages/backend/dist/main.js"
+  },
+  "private": true,
+  "keywords": [],
+  "author": {
+    "name": "Sayed Mahmoud Sayed",
+    "email": "sayedmsayed266+qarinai@gmail.com",
+    "url": "https://sayedmahmoud266.website"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qarinai/qarinai"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/qarinai/qarinai/issues"
+  },
+  "homepage": "https://github.com/qarinai/qarinai#readme",
+  "dependencies": {
+    "@types/gulp": "^4.0.17",
+    "gulp": "^5.0.1",
+    "typescript": "^5.9.2"
+  }
+}

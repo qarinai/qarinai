@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  qarinai.qarinai:
+    image: qarinai/qarinai:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=qarinai.pgvector
+      - DB_PORT=5432
+      - DB_USER=qarinai_user
+      - DB_PASS=qarinai_pass
+      - DB_NAME=qarinai
+      - JWT_ACCESS_TOKEN_SECRET=your_jwt_secret
+      - JWT_ACCESS_TOKEN_EXPIRATION=5m
+      - JWT_REFRESH_TOKEN_SECRET=your_jwt_refresh_secret
+      - JWT_REFRESH_TOKEN_EXPIRATION=7d
+      - SECURE_KEY_PASSPHRASE=your_secure_key_passphrase
+      - DEFAULT_ADMIN_PASSWORD=admin
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+    restart: unless-stopped
+    networks:
+      - qarinai_network
+    depends_on:
+      - qarinai.pgvector
+  qarinai.pgvector:
+    image: pgvector/pgvector:pg17
+    environment:
+      - POSTGRES_USER=qarinai_user
+      - POSTGRES_PASSWORD=qarinai_pass
+      - POSTGRES_DB=qarinai
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - qarinai_network
+networks:
+  qarinai_network:
+    driver: bridge
