@@ -73,6 +73,13 @@ docker compose up -d
 
 This starts Qarīn.ai with all required environment variables pre-configured.
 
+### Default Login Credentials
+
+- Username: `admin`
+- Password: `admin`
+
+---
+
 ## 🛠 Creating Your First Agent
 
 Once running:
@@ -85,6 +92,8 @@ Once running:
 6. (Optional) Create vector stores and upload documents for RAG.
 7. Create your AI agent — define name, identity, and instructions.
 8. Embed it — click “Add to Website” to get your dynamic snippet code.
+
+---
 
 ## 🗺 Feature Roadmap
 
@@ -104,9 +113,13 @@ The near-term focus will be **completing and stabilizing all current functionali
   - Style, color, and branding customization for the chat bubble and iframe widget.
 - 🚀 Additional quality-of-life improvements after stabilization.
 
+---
+
 ## 📜 License
 
 This project is licensed under the Apache 2.0 License — see [LICENSE](/LICENSE) for details.
+
+---
 
 ## 🙏 Acknowledgements
 
@@ -123,6 +136,8 @@ A special thanks to the maintainers of the amazing technologies powering Qarīn.
 - **And many more...** — every dependency plays a role in making this project possible.
 
 If you maintain one of these libraries: **thank you** for your dedication to open-source! ❤️
+
+---
 
 ## 🤝 Contributing
 
