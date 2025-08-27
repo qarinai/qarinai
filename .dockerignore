@@ -18,3 +18,7 @@ packages/backend/uploads/*
 packages/backend/public/*
 
 db-data
+
+
+.env
+**/*/.env

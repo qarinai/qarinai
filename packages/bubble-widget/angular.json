@@ -27,7 +27,8 @@
                 "inject": false
               }
             ],
-            "outputPath": "dist"
+            "outputPath": "dist",
+            "allowedCommonJsDependencies": ["@fortawesome/free-solid-svg-icons"]
           },
           "configurations": {
             "production": {

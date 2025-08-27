@@ -37,3 +37,21 @@ export default gulp.series(
   buildBackend,
   copyFrontendToBackend,
 );
+
+function installFrontendDependencies() {
+  return exec("yarn install", { cwd: "packages/frontend" });
+}
+
+function installBackendDependencies() {
+  return exec("yarn install", { cwd: "packages/backend" });
+}
+
+function installWidgetDependencies() {
+  return exec("yarn install", { cwd: "packages/bubble-widget" });
+}
+
+export const installPackages = gulp.series(
+  installWidgetDependencies,
+  installFrontendDependencies,
+  installBackendDependencies,
+);

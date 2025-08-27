@@ -123,7 +123,7 @@ export class Bubble implements OnInit {
       .messageAgent(
         this.agent()?.id ?? '',
         content.trim(),
-        this.convrsationId()
+        this.convrsationId(),
       )
       .subscribe({
         next: (event) => {
