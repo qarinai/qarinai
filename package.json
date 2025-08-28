@@ -1,6 +1,6 @@
 {
   "name": "qarinai",
-  "version": "0.0.0-dev",
+  "version": "0.0.0-dev.1",
   "description": "A monorepo for QarinAI projects",
   "scripts": {
     "build": "gulp",
