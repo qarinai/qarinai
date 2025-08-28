@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY package.json yarn.lock ./
 COPY packages ./packages/
+COPY gulp ./gulp/
 COPY gulpfile.ts tsconfig.json ./
 
 RUN npm install -g gulp-cli
