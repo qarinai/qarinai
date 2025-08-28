@@ -3,9 +3,13 @@
   "version": "0.0.0-dev",
   "description": "A monorepo for QarinAI projects",
   "scripts": {
-    "build": "gulp",
-    "install:packages": "gulp installPackages",
-    "start:prod": "node packages/backend/dist/main.js"
+    "build": "gulp build",
+    "install:packages": "gulp install:packages",
+    "start:prod": "node packages/backend/dist/main.js",
+    "release": "gulp release",
+    "release:patch": "BUMP=patch gulp release",
+    "release:minor": "BUMP=minor gulp release",
+    "release:major": "BUMP=major gulp release"
   },
   "private": true,
   "keywords": [],
@@ -29,6 +33,9 @@
     "typescript": "^5.9.2"
   },
   "devDependencies": {
-    "prettier": "^3.6.2"
+    "@types/semver": "^7.7.0",
+    "prettier": "^3.6.2",
+    "semver": "^7.7.2",
+    "ts-node": "^10.9.2"
   }
 }
