@@ -2,7 +2,7 @@ import { src, series, task } from "gulp";
 import * as fs from "fs";
 import * as path from "path";
 import * as semver from "semver";
-import { execSync } from "child_process";
+import { exec, execSync } from "child_process";
 
 const rootDir = process.cwd();
 const versionFile = path.join(rootDir, ".version");
@@ -89,8 +89,12 @@ function dockerBuild(cb: any) {
     execSync(`docker build -t ${imageName}:${newVersion} .`, {
       stdio: "inherit",
     });
+    execSync(`docker tag ${imageName}:${newVersion} ${imageName}:latest`, {
+      stdio: "inherit",
+    });
     execSync(`docker push ${imageName}:${newVersion}`, { stdio: "inherit" });
-    console.log(`Docker image pushed: ${imageName}:${newVersion}`);
+    execSync(`docker push ${imageName}:latest`, { stdio: "inherit" });
+    console.log(`Docker image pushed: ${imageName}:${newVersion} and latest`);
     cb();
   } catch (err: any) {
     cb(new Error("Docker build/push failed: " + err.message));
