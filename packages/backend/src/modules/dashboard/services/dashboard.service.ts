@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AgentService } from 'src/modules/agent/services/agent.service';
-import { ChatProviderService } from 'src/modules/chat-provider/services/chat-provider.service';
+import { LlmProviderService } from 'src/modules/llm-provider/services/llm-provider.service';
 import { ConversationService } from 'src/modules/conversation/services/conversation.service';
 import { MessageService } from 'src/modules/conversation/services/message.service';
 import { McpAdapterServerService } from 'src/modules/mcp/services/mcp-adapter-server.service';
@@ -16,7 +16,7 @@ export class DashboardService {
   private readonly agentService: AgentService;
 
   @Inject()
-  private readonly chatProviderService: ChatProviderService;
+  private readonly llmProviderService: LlmProviderService;
 
   @Inject()
   private readonly mcpAdapterServerService: McpAdapterServerService;
@@ -32,13 +32,13 @@ export class DashboardService {
 
   async getStats() {
     const agents = await this.agentService.repo.count();
-    const chatProviders = await this.chatProviderService.repo.count();
+    const llmProviders = await this.llmProviderService.repo.count();
     const mcpServers = await this.mcpAdapterServerService.repo.count();
     const vectorStores = await this.vectorStoreService.repo.count();
 
     return {
       agents,
-      chatProviders,
+      llmProviders,
       mcpServers,
       vectorStores,
     };

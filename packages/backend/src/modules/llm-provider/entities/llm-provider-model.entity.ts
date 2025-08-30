@@ -1,12 +1,12 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { ChatProvider } from './chat-provider.entity';
+import { LlmProvider } from './llm-provider.entity';
 import { AbstractEntity } from 'src/common/entities/abstract.entity';
 
 @Entity()
-export class ChatProviderModel extends AbstractEntity {
-  @ManyToOne(() => ChatProvider)
+export class LlmProviderModel extends AbstractEntity {
+  @ManyToOne(() => LlmProvider)
   @JoinColumn()
-  provider: ChatProvider;
+  provider: LlmProvider;
 
   @Column()
   name: string;

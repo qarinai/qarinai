@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Agent } from '../entities/agent.entity';
 import { Repository } from 'typeorm';
 import { CreateAgentDto } from '../dtos/create-agent.dto';
-import { ChatProviderModel } from 'src/modules/chat-provider/entities/chat-provider-model.entity';
+import { LlmProviderModel } from 'src/modules/llm-provider/entities/llm-provider-model.entity';
 import { McpAdapterServer } from 'src/modules/mcp/entities/mcp-adapter-server.entity';
 import { McpAdapterServerService } from 'src/modules/mcp/services/mcp-adapter-server.service';
 import { ChatCompletionChunk } from 'openai/resources/index';
@@ -112,14 +112,14 @@ export class AgentService {
     if (defaultModelId) {
       agent.defaultModel = {
         id: defaultModelId,
-      } as ChatProviderModel;
+      } as LlmProviderModel;
     }
 
     if (allowedModelIds && allowedModelIds.length > 0) {
       agent.allowedModels = allowedModelIds.map((modelId) => {
         return {
           id: modelId,
-        } as ChatProviderModel;
+        } as LlmProviderModel;
       });
     }
 
@@ -150,14 +150,14 @@ export class AgentService {
     if (defaultModelId) {
       agent.defaultModel = {
         id: defaultModelId,
-      } as ChatProviderModel;
+      } as LlmProviderModel;
     }
 
     if (allowedModelIds && allowedModelIds.length > 0) {
       agent.allowedModels = allowedModelIds.map((modelId) => {
         return {
           id: modelId,
-        } as ChatProviderModel;
+        } as LlmProviderModel;
       });
     }
 

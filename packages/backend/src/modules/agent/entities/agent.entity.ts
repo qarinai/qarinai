@@ -1,5 +1,5 @@
 import { AbstractEntity } from 'src/common/entities/abstract.entity';
-import { ChatProviderModel } from 'src/modules/chat-provider/entities/chat-provider-model.entity';
+import { LlmProviderModel } from 'src/modules/llm-provider/entities/llm-provider-model.entity';
 import { McpAdapterServer } from 'src/modules/mcp/entities/mcp-adapter-server.entity';
 import {
   Column,
@@ -18,13 +18,13 @@ export class Agent extends AbstractEntity {
   @Column()
   description: string;
 
-  @ManyToOne(() => ChatProviderModel)
+  @ManyToOne(() => LlmProviderModel)
   @JoinColumn()
-  defaultModel: ChatProviderModel;
+  defaultModel: LlmProviderModel;
 
-  @ManyToMany(() => ChatProviderModel)
+  @ManyToMany(() => LlmProviderModel)
   @JoinTable()
-  allowedModels: ChatProviderModel[];
+  allowedModels: LlmProviderModel[];
 
   @ManyToMany(() => McpAdapterServer)
   @JoinTable()

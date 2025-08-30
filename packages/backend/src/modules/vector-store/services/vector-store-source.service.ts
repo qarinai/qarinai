@@ -18,9 +18,9 @@ import { Document } from '@langchain/core/documents';
 import { VectorStoreSourceStatus } from '../enums/vector-store-source-status.enum';
 import { VectorStoreStatus } from '../enums/vector-store-status.enum';
 import { SettingService } from 'src/modules/settings/services/setting.service';
-import { ChatProviderService } from 'src/modules/chat-provider/services/chat-provider.service';
+import { LlmProviderService } from 'src/modules/llm-provider/services/llm-provider.service';
 import { SettingKey } from 'src/modules/settings/enums/setting-key.enum';
-import { ChatProviderModelService } from 'src/modules/chat-provider/services/chat-provider-model.service';
+import { LlmProviderModelService } from 'src/modules/llm-provider/services/llm-provider-model.service';
 import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
 
 @Injectable()
@@ -44,10 +44,10 @@ export class VectorStoreSourceService {
   private readonly settingService: SettingService;
 
   @Inject()
-  private readonly chatProviderService: ChatProviderService;
+  private readonly llmProviderService: LlmProviderService;
 
   @Inject()
-  private readonly chatProviderModelService: ChatProviderModelService;
+  private readonly llmProviderModelService: LlmProviderModelService;
 
   async createVectorStoreSource(dto: CreateVectorStoreSourceDto) {
     const vectorStore = await this.vectorStoreService.getVectorStoreById(
@@ -260,7 +260,7 @@ export class VectorStoreSourceService {
       return null;
     }
 
-    const model = await this.chatProviderModelService.getModelById(
+    const model = await this.llmProviderModelService.getModelById(
       defaultModelSetting.value,
     );
 
@@ -269,7 +269,7 @@ export class VectorStoreSourceService {
     }
 
     const client =
-      await this.chatProviderService.getChatProviderClientByModel(model);
+      await this.llmProviderService.getLlmProviderClientByModel(model);
 
     let requestedContent = content;
     if (requestedContent.length > 4000) {

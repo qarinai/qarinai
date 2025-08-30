@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ChatProvider } from '../entities/chat-provider.entity';
+import { LlmProvider } from '../entities/llm-provider.entity';
 import OpenAI from 'openai';
 import { SecureKeyService } from 'src/modules/secure-keys/services/secure-key.service';
 
 @Injectable()
-export class OpenAIChatProviderClientService {
+export class OpenAILlmProviderClientService {
   @Inject()
   private readonly secureKeyService: SecureKeyService;
 
@@ -19,7 +19,7 @@ export class OpenAIChatProviderClientService {
     return client;
   }
 
-  async with(provider: ChatProvider) {
+  async with(provider: LlmProvider) {
     if (this.clientMap.has(provider.id)) {
       return this.clientMap.get(provider.id) as OpenAI;
     }

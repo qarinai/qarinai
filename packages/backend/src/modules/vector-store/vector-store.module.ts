@@ -14,7 +14,7 @@ import { FileLoaderService } from './services/file-loader.service';
 import { UpdateVectorStoreSourceStatusTask } from './tasks/update-vector-store-source-status.task';
 import { VectorStoreController } from './controllers/vector-store.controller';
 import { VectorStoreSourceController } from './controllers/vector-store-source.controller';
-import { ChatProviderModule } from '../chat-provider/chat-provider.module';
+import { LlmProviderModule } from '../llm-provider/llm-provider.module';
 import { McpModule } from '../mcp/mcp.module';
 
 @Module({
@@ -26,7 +26,7 @@ import { McpModule } from '../mcp/mcp.module';
       VectorStoreSourceChunk,
     ]),
     FileModule,
-    ChatProviderModule,
+    LlmProviderModule,
     forwardRef(() => McpModule),
   ],
   providers: [

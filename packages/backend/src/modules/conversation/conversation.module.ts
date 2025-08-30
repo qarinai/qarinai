@@ -5,7 +5,7 @@ import { Message } from './entities/message.entity';
 import { ConversationService } from './services/conversation.service';
 import { MessageService } from './services/message.service';
 import { AgentModule } from '../agent/agent.module';
-import { ChatProviderModule } from '../chat-provider/chat-provider.module';
+import { LlmProviderModule } from '../llm-provider/llm-provider.module';
 import { AgentChatController } from './controllers/agent-chat.controller';
 
 @Module({
@@ -13,7 +13,7 @@ import { AgentChatController } from './controllers/agent-chat.controller';
   imports: [
     TypeOrmModule.forFeature([Conversation, Message]),
     AgentModule,
-    ChatProviderModule,
+    LlmProviderModule,
   ],
   providers: [ConversationService, MessageService],
   exports: [ConversationService, MessageService],

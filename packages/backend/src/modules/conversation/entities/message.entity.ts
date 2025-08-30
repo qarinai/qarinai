@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Conversation } from './conversation.entity';
-import { ChatProviderModel } from 'src/modules/chat-provider/entities/chat-provider-model.entity';
+import { LlmProviderModel } from 'src/modules/llm-provider/entities/llm-provider-model.entity';
 import { AbstractEntity } from 'src/common/entities/abstract.entity';
 
 @Entity()
@@ -19,9 +19,9 @@ export class Message extends AbstractEntity {
   @Column({ type: 'varchar', nullable: true })
   originalMsgId: string | null;
 
-  @ManyToOne(() => ChatProviderModel)
+  @ManyToOne(() => LlmProviderModel)
   @JoinColumn()
-  model: ChatProviderModel;
+  model: LlmProviderModel;
 
   @Column({
     type: 'enum',

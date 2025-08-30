@@ -1,45 +1,45 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ChatProvider } from '../entities/chat-provider.entity';
+import { LlmProvider } from '../entities/llm-provider.entity';
 import { Repository } from 'typeorm';
-import { CreateChatProviderDto } from '../dtos/create-chat-provider.dto';
-import { OpenAIChatProviderClientService } from '../clients/open-ai-chat-provider-client.service';
-import { ChatProviderModelService } from './chat-provider-model.service';
+import { CreateLlmProviderDto } from '../dtos/create-llm-provider.dto';
+import { OpenAILlmProviderClientService } from '../clients/open-ai-llm-provider-client.service';
+import { LlmProviderModelService } from './llm-provider-model.service';
 import { CheckAvailableModelsDto } from '../dtos/check-available-models.dto';
-import { ChatProviderModel } from '../entities/chat-provider-model.entity';
+import { LlmProviderModel } from '../entities/llm-provider-model.entity';
 import { SecureKeyService } from 'src/modules/secure-keys/services/secure-key.service';
 
 @Injectable()
-export class ChatProviderService {
+export class LlmProviderService {
   @Inject()
-  private readonly providerClientService: OpenAIChatProviderClientService;
+  private readonly providerClientService: OpenAILlmProviderClientService;
 
   @Inject()
-  private readonly chatProviderModelService: ChatProviderModelService;
+  private readonly llmProviderModelService: LlmProviderModelService;
 
   @Inject()
   private readonly secureKeyService: SecureKeyService;
 
-  @InjectRepository(ChatProvider)
-  public repo: Repository<ChatProvider>;
+  @InjectRepository(LlmProvider)
+  public repo: Repository<LlmProvider>;
 
-  listChatProviders() {
+  listLlmProviders() {
     return this.repo.find({
       relations: ['models'],
     });
   }
 
-  async getChatProviderClientByModel(modelOrId: string | ChatProviderModel) {
-    let model: ChatProviderModel | null;
+  async getLlmProviderClientByModel(modelOrId: string | LlmProviderModel) {
+    let model: LlmProviderModel | null;
 
     if (typeof modelOrId === 'string') {
-      model = await this.chatProviderModelService.getModelById(modelOrId);
+      model = await this.llmProviderModelService.getModelById(modelOrId);
     } else {
       model = modelOrId;
     }
 
     if (!model) {
-      throw new Error(`Chat provider model not found`);
+      throw new Error(`LLM provider model not found`);
     }
 
     const provider = await this.repo.findOne({
@@ -48,7 +48,7 @@ export class ChatProviderService {
     });
 
     if (!provider) {
-      throw new Error(`Chat provider for model ${model.name} not found`);
+      throw new Error(`LLM provider for model ${model.name} not found`);
     }
 
     return await this.providerClientService.with(provider);
@@ -65,7 +65,7 @@ export class ChatProviderService {
     return r.data;
   }
 
-  async createChatProvider(providerData: CreateChatProviderDto) {
+  async createLlmProvider(providerData: CreateLlmProviderDto) {
     const { models, apiKey, ...rest } = providerData;
 
     const secureKey =
@@ -78,7 +78,7 @@ export class ChatProviderService {
     provider = await this.repo.save(provider);
 
     const savedModels =
-      await this.chatProviderModelService.createModelsForProvider(
+      await this.llmProviderModelService.createModelsForProvider(
         provider.id,
         models,
       );
@@ -93,7 +93,7 @@ export class ChatProviderService {
       where: { id: providerId },
     });
     if (!provider) {
-      throw new Error(`Chat provider with ID ${providerId} not found`);
+      throw new Error(`LLM provider with ID ${providerId} not found`);
     }
     const client = await this.providerClientService.with(provider);
 
@@ -105,10 +105,10 @@ export class ChatProviderService {
       where: { id: providerId },
     });
     if (!provider) {
-      throw new Error(`Chat provider with ID ${providerId} not found`);
+      throw new Error(`LLM provider with ID ${providerId} not found`);
     }
 
-    const models = await this.chatProviderModelService.createModelsForProvider(
+    const models = await this.llmProviderModelService.createModelsForProvider(
       providerId,
       modelNames,
     );

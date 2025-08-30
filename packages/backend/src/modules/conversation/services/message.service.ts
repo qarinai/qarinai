@@ -8,14 +8,14 @@ import {
   SendMessageParamsDto,
 } from '../dtos/send-message.dto';
 import { Conversation } from '../entities/conversation.entity';
-import { ChatProviderService } from 'src/modules/chat-provider/services/chat-provider.service';
+import { LlmProviderService } from 'src/modules/llm-provider/services/llm-provider.service';
 import {
   ChatCompletionChunk,
   ChatCompletionMessageParam,
   ChatCompletionToolChoiceOption,
 } from 'openai/resources/index';
 import { AgentService } from 'src/modules/agent/services/agent.service';
-import { ChatProviderModel } from 'src/modules/chat-provider/entities/chat-provider-model.entity';
+import { LlmProviderModel } from 'src/modules/llm-provider/entities/llm-provider-model.entity';
 import { Response } from 'express';
 import { IResponseChunk } from '../interfaces/response-chunk.interface';
 
@@ -28,7 +28,7 @@ export class MessageService {
   private readonly conversationService: ConversationService;
 
   @Inject()
-  private readonly chatProviderService: ChatProviderService;
+  private readonly llmProviderService: LlmProviderService;
 
   @Inject()
   private readonly agentService: AgentService;
@@ -59,8 +59,8 @@ export class MessageService {
 
     // send messages to chat provider and stream response
 
-    const chatProviderClient =
-      await this.chatProviderService.getChatProviderClientByModel(model);
+    const llmProviderClient =
+      await this.llmProviderService.getLlmProviderClientByModel(model);
 
     const availableTools =
       await this.agentService.getMcpServersModelToolsByAgentId(
@@ -92,7 +92,7 @@ export class MessageService {
       try {
         const strippedMessages =
           this.mapConversationMessagesToChatCompletionMessages(conversation);
-        const result = await chatProviderClient.chat.completions.create({
+        const result = await llmProviderClient.chat.completions.create({
           model: model.name,
           messages: strippedMessages,
           tools: completionTools,
@@ -329,7 +329,7 @@ export class MessageService {
   private async getToolCallResult(
     toolCall: ChatCompletionChunk.Choice.Delta.ToolCall,
     conversation: Conversation,
-    model: ChatProviderModel,
+    model: LlmProviderModel,
   ) {
     const result = await this.agentService.callToolFromAgent(
       conversation.agent,

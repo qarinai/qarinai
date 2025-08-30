@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { McpModule } from './modules/mcp/mcp.module';
 import { AgentModule } from './modules/agent/agent.module';
-import { ChatProviderModule } from './modules/chat-provider/chat-provider.module';
+import { LlmProviderModule } from './modules/llm-provider/llm-provider.module';
 import { ConversationModule } from './modules/conversation/conversation.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { SettingModule } from './modules/settings/setting.module';
@@ -68,7 +68,7 @@ import { join } from 'path';
     }),
     McpModule,
     AgentModule,
-    ChatProviderModule,
+    LlmProviderModule,
     ConversationModule,
     SettingModule,
     VectorStoreModule,

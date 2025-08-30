@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
-export class CreateChatProviderDto {
+export class CreateLlmProviderDto {
   @IsNotEmpty()
   @IsString()
   name: string;
