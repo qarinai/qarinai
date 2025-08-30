@@ -7,8 +7,8 @@ import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { ChatProviderBackendService } from '../../chat-providers/_services/chat-provider-backend.service';
-import { IChatProvider } from '../../chat-providers/_interfaces/chat-provider.interface';
+import { LlmProviderBackendService } from '../../llm-providers/_services/llm-provider-backend.service';
+import { ILlmProvider } from '../../llm-providers/_interfaces/llm-provider.interface';
 import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { McpServerBackendService } from '../../mcp-servers/_services/mcp-server-backend.service';
@@ -34,13 +34,13 @@ import { InfoHelpComponent } from '../../../utils/components/info-help/info-help
     MultiSelectModule,
     InfoHelpComponent
   ],
-  providers: [ChatProviderBackendService, McpServerBackendService, AgentsBackendService],
+  providers: [LlmProviderBackendService, McpServerBackendService, AgentsBackendService],
   templateUrl: './add-agent.component.html',
   styleUrl: './add-agent.component.scss'
 })
 export class AddAgentComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly chatProviderService = inject(ChatProviderBackendService);
+  private readonly llmProviderService = inject(LlmProviderBackendService);
   private readonly mcpServersService = inject(McpServerBackendService);
   private readonly agentService = inject(AgentsBackendService);
   private readonly messageService = inject(MessageService);
@@ -51,12 +51,12 @@ export class AddAgentComponent implements OnInit {
   agentToEdit = signal<IAgent | null>(null);
 
   isLoadingModels = signal<boolean>(false);
-  chatProviders = signal<IChatProvider[]>([]);
+  llmProviders = signal<ILlmProvider[]>([]);
 
   additionalAllowedModels = computed(() => {
-    return this.chatProviders().map((provider) => ({
+    return this.llmProviders().map((provider: any) => ({
       ...provider,
-      models: provider.models.filter((model) => model.id !== this.agentFormValue()?.defaultModelId)
+      models: provider.models.filter((model: any) => model.id !== this.agentFormValue()?.defaultModelId)
     }));
   });
 
@@ -88,13 +88,13 @@ export class AddAgentComponent implements OnInit {
 
   loadModels() {
     this.isLoadingModels.set(true);
-    this.chatProviderService.listChatProviders().subscribe({
-      next: (providers) => {
-        this.chatProviders.set(providers);
+    this.llmProviderService.listLlmProviders().subscribe({
+      next: (providers: any) => {
+        this.llmProviders.set(providers);
         this.isLoadingModels.set(false);
       },
-      error: (error) => {
-        console.error('Error loading chat providers:', error);
+      error: (error: any) => {
+        console.error('Error loading LLM providers:', error);
         this.isLoadingModels.set(false);
       }
     });

@@ -40,9 +40,9 @@ export class AppMenu {
         label: 'Sections',
         items: [
           {
-            label: 'Chat Providers',
+            label: 'LLM Providers',
             icon: 'pi pi-comments',
-            routerLink: ['/pages/chat-providers'],
+            routerLink: ['/pages/llm-providers'],
             routerLinkActiveOptions: {
               paths: 'subset',
               queryParams: 'ignored',

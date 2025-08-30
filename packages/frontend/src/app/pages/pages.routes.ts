@@ -11,8 +11,8 @@ export default [
     loadChildren: () => import('./mcp-servers/mcp-servers.routes').then((m) => m.default)
   },
   {
-    path: 'chat-providers',
-    loadChildren: () => import('./chat-providers/chat-providers.routes').then((m) => m.default)
+    path: 'llm-providers',
+    loadChildren: () => import('./llm-providers/llm-providers.routes').then((m) => m.default)
   },
   {
     path: 'agents',

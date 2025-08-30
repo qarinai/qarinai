@@ -7,13 +7,13 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
-import { IChatProvider, IChatProviderModel } from '../_interfaces/chat-provider.interface';
-import { ChatProviderBackendService } from '../_services/chat-provider-backend.service';
+import { ILlmProvider, ILlmProviderModel } from '../_interfaces/llm-provider.interface';
+import { LlmProviderBackendService } from '../_services/llm-provider-backend.service';
 import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox';
 import { InfoHelpComponent } from '../../../utils/components/info-help/info-help.component';
 
 @Component({
-  selector: 'app-add-chat-provider',
+  selector: 'app-add-llm-provider',
   standalone: true,
   imports: [
     CommonModule,
@@ -27,16 +27,16 @@ import { InfoHelpComponent } from '../../../utils/components/info-help/info-help
     InfoHelpComponent
   ],
   providers: [],
-  templateUrl: './add-chat-provider.component.html',
-  styleUrl: './add-chat-provider.component.scss'
+  templateUrl: './add-llm-provider.component.html',
+  styleUrl: './add-llm-provider.component.scss'
 })
-export class AddChatProviderComponent implements OnInit {
-  private chatProviderService = inject(ChatProviderBackendService);
+export class AddLlmProviderComponent implements OnInit {
+  private llmProviderService = inject(LlmProviderBackendService);
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
   private router = inject(Router);
 
-  chatProviderForm!: FormGroup;
+  llmProviderForm!: FormGroup;
   models = signal<string[]>([]);
   isLoadingModels = signal<boolean>(false);
   isModelsLoaded = signal<boolean>(false);
@@ -47,7 +47,7 @@ export class AddChatProviderComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.chatProviderForm = this.fb.group({
+    this.llmProviderForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       apiBaseUrl: ['', [Validators.required, Validators.pattern('^https?://.*')]],
       apiKey: ['', [Validators.required]]
@@ -55,7 +55,7 @@ export class AddChatProviderComponent implements OnInit {
   }
 
   fetchModels(): void {
-    if (this.chatProviderForm.invalid) {
+    if (this.llmProviderForm.invalid) {
       this.messageService.add({
         severity: 'error',
         summary: 'Validation Error',
@@ -64,18 +64,18 @@ export class AddChatProviderComponent implements OnInit {
       return;
     }
 
-    const apiBaseUrl = this.chatProviderForm.get('apiBaseUrl')?.value;
-    const apiKey = this.chatProviderForm.get('apiKey')?.value;
+    const apiBaseUrl = this.llmProviderForm.get('apiBaseUrl')?.value;
+    const apiKey = this.llmProviderForm.get('apiKey')?.value;
 
     this.isLoadingModels.set(true);
-    this.chatProviderService.fetchModels(apiBaseUrl, apiKey).subscribe({
-      next: (models) => {
-        this.models.set(models.map((m) => m.id));
-        this.selectedModels.set(models.map((m) => m.id));
+    this.llmProviderService.fetchModels(apiBaseUrl, apiKey).subscribe({
+      next: (models: any) => {
+        this.models.set(models.map((m: any) => m.id));
+        this.selectedModels.set(models.map((m: any) => m.id));
         this.isModelsLoaded.set(true);
         this.isLoadingModels.set(false);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error fetching models:', error);
         this.messageService.add({
           severity: 'error',
@@ -92,7 +92,7 @@ export class AddChatProviderComponent implements OnInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'Please fetch models before saving the chat provider'
+        detail: 'Please fetch models before saving the LLM provider'
       });
       return;
     }
@@ -108,33 +108,33 @@ export class AddChatProviderComponent implements OnInit {
 
     this.isSaving.set(true);
 
-    const chatProvider: Partial<IChatProvider> = {
-      name: this.chatProviderForm.get('name')?.value,
+    const llmProvider: Partial<ILlmProvider> = {
+      name: this.llmProviderForm.get('name')?.value,
       protocol: 'openai',
-      apiBaseUrl: this.chatProviderForm.get('apiBaseUrl')?.value,
-      apiKey: this.chatProviderForm.get('apiKey')?.value,
+      apiBaseUrl: this.llmProviderForm.get('apiBaseUrl')?.value,
+      apiKey: this.llmProviderForm.get('apiKey')?.value,
       models: this.selectedModels() as any
     };
 
-    this.chatProviderService.createChatProvider(chatProvider).subscribe({
+    this.llmProviderService.createLlmProvider(llmProvider).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Chat provider has been created successfully'
+          detail: 'LLM provider has been created successfully'
         });
         this.isSaving.set(false);
         // Navigate back to the list page after a short delay
         setTimeout(() => {
-          this.router.navigate(['/pages/chat-providers']);
+          this.router.navigate(['/pages/llm-providers']);
         }, 1500);
       },
-      error: (error) => {
-        console.error('Error creating chat provider:', error);
+      error: (error: any) => {
+        console.error('Error creating LLM provider:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Failed to create chat provider'
+          detail: 'Failed to create LLM provider'
         });
         this.isSaving.set(false);
       }

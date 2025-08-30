@@ -1,6 +1,6 @@
 export interface IDashboardStats {
   agents: number;
-  chatProviders: number;
+  llmProviders: number;
   vectorStores: number;
   mcpServers: number;
 }

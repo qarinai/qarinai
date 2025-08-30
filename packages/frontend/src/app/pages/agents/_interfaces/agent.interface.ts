@@ -1,4 +1,4 @@
-import { IChatProviderModel } from '../../chat-providers/_interfaces/chat-provider.interface';
+import { ILlmProviderModel } from '../../llm-providers/_interfaces/llm-provider.interface';
 import { IMcpServer } from '../../mcp-servers/_interfaces/mcp-server.interface';
 
 export interface IAgent {
@@ -7,8 +7,8 @@ export interface IAgent {
   description: string;
   identityMessage: string;
   systemMessage: string;
-  defaultModel: IChatProviderModel;
-  allowedModels: IChatProviderModel[];
+  defaultModel: ILlmProviderModel;
+  allowedModels: ILlmProviderModel[];
   linkedMCPServers: IMcpServer[];
   isActive: boolean;
   metadata: any;

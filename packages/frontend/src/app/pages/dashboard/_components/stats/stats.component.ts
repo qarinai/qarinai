@@ -34,10 +34,10 @@ export class StatsComponent implements OnInit {
         this.stats.set(data);
         this.loading.set(false);
 
-        if (data.chatProviders > 0) {
+        if (data.llmProviders > 0) {
           this.checkSettings();
         } else {
-          this.notifyNoChatProviders();
+          this.notifyNoLlmProviders();
         }
       },
       error: () => {
@@ -60,13 +60,13 @@ export class StatsComponent implements OnInit {
     });
   }
 
-  private notifyNoChatProviders() {
+  private notifyNoLlmProviders() {
     this.messageService.add({
       severity: 'warn',
-      summary: 'No Chat Providers',
-      detail: 'Please add a chat provider to get started.'
+      summary: 'No LLM Providers',
+      detail: 'Please add an LLM provider to get started.'
     });
 
-    this.router.navigate(['/pages/chat-providers']);
+    this.router.navigate(['/pages/llm-providers']);
   }
 }

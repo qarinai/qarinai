@@ -78,7 +78,7 @@
       <div class="flex w-full flex-col gap-4">
         <label>Default Model</label>
         <p-select
-          [options]="chatProviders()"
+          [options]="llmProviders()"
           [group]="true"
           formControlName="defaultModelId"
           [loading]="isLoadingModels()"

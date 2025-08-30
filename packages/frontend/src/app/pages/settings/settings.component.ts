@@ -5,8 +5,8 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { SettingKey } from './_interfaces/settings.interface';
-import { ChatProviderBackendService } from '../chat-providers/_services/chat-provider-backend.service';
-import { IChatProvider } from '../chat-providers/_interfaces/chat-provider.interface';
+import { LlmProviderBackendService } from '../llm-providers/_services/llm-provider-backend.service';
+import { ILlmProvider } from '../llm-providers/_interfaces/llm-provider.interface';
 
 @Component({
   selector: 'app-settings',
@@ -16,32 +16,32 @@ import { IChatProvider } from '../chat-providers/_interfaces/chat-provider.inter
 })
 export class SettingsComponent implements OnInit {
   settingBackendService = inject(SettingsBackendService);
-  chatProviderBackendService = inject(ChatProviderBackendService);
+  llmProviderBackendService = inject(LlmProviderBackendService);
   fb = inject(FormBuilder);
 
-  chatProviders = signal<IChatProvider[]>([]);
+  llmProviders = signal<ILlmProvider[]>([]);
 
   settingsLoading = signal<boolean>(true);
-  chatProvidersLoading = signal<boolean>(true);
+  llmProvidersLoading = signal<boolean>(true);
 
-  allLoading = computed(() => this.settingsLoading() || this.chatProvidersLoading());
+  allLoading = computed(() => this.settingsLoading() || this.llmProvidersLoading());
 
   settingsForm = this.fb.group({
-    defaultChatProvider: [''],
+    defaultLlmProvider: [''],
     defaultChatModel: ['']
     // defaultEmbeddingModel: ['']
   });
 
   ngOnInit(): void {
     this.loadSettingValues();
-    this.loadChatProviders();
+    this.loadLlmProviders();
   }
 
   saveSettings() {
     const settingsToUpdate = [
       {
-        key: SettingKey.DefaultChatProvider,
-        value: this.settingsForm.value.defaultChatProvider || ''
+        key: SettingKey.DefaultLlmProvider,
+        value: this.settingsForm.value.defaultLlmProvider || ''
       },
       {
         key: SettingKey.DefaultChatModel,
@@ -66,7 +66,7 @@ export class SettingsComponent implements OnInit {
     this.settingBackendService.listAllSettings().subscribe((settings) => {
       this.settingsLoading.set(false);
       const formValues = {
-        defaultChatProvider: settings.find((s) => s.key === SettingKey.DefaultChatProvider)?.value || '',
+        defaultLlmProvider: settings.find((s) => s.key === SettingKey.DefaultLlmProvider)?.value || '',
         defaultChatModel: settings.find((s) => s.key === SettingKey.DefaultChatModel)?.value || ''
         // defaultEmbeddingModel: settings.find(s => s.key === 'default_embedding_model')?.value || ''
       };
@@ -74,11 +74,11 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  private loadChatProviders() {
-    this.chatProvidersLoading.set(true);
-    this.chatProviderBackendService.listChatProviders().subscribe((providers) => {
-      this.chatProvidersLoading.set(false);
-      this.chatProviders.set(providers);
+  private loadLlmProviders() {
+    this.llmProvidersLoading.set(true);
+    this.llmProviderBackendService.listLlmProviders().subscribe((providers: any) => {
+      this.llmProvidersLoading.set(false);
+      this.llmProviders.set(providers);
     });
   }
 }

@@ -5,14 +5,14 @@
       icon="pi pi-plus"
       severity="primary"
       class="mr-2"
-      (onClick)="onAddChatProviderClick()"
+      (onClick)="onAddLlmProviderClick()"
     ></p-button>
   </ng-template>
 </p-toolbar>
 
 <p-table
   #dt
-  [value]="chatProviders()"
+  [value]="llmProviders()"
   [loading]="isLoading()"
   [columns]="[]"
   [paginator]="false"
@@ -21,7 +21,7 @@
 >
   <ng-template #caption>
     <div class="flex items-center justify-between">
-      <h5 class="m-0">Manage Chat Providers</h5>
+      <h5 class="m-0">Manage LLM Providers</h5>
     </div>
   </ng-template>
 

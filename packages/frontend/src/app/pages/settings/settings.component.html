@@ -4,13 +4,13 @@
   </div>
   <form [formGroup]="settingsForm" class="card-body flex flex-col gap-4">
     <div class="input-field flex flex-col gap-1">
-      <label for="defaultChatProvider">Default Chat Provider</label>
+      <label for="defaultLlmProvider">Default LLM Provider</label>
       <p-select
-        formControlName="defaultChatProvider"
-        id="defaultChatProvider"
+        formControlName="defaultLlmProvider"
+        id="defaultLlmProvider"
         placeholder="Select a provider"
         class="w-full"
-        [options]="chatProviders()"
+        [options]="llmProviders()"
         optionLabel="name"
         optionValue="id"
         [loading]="allLoading()"
@@ -24,7 +24,7 @@
         id="defaultChatModel"
         placeholder="Select a model"
         class="w-full"
-        [options]="chatProviders()"
+        [options]="llmProviders()"
         [group]="true"
         optionLabel="name"
         optionValue="id"

@@ -1,9 +1,9 @@
 <div class="card p-4">
-  <h2 class="text-2xl font-semibold mb-6">Add Chat Provider</h2>
+  <h2 class="text-2xl font-semibold mb-6">Add LLM Provider</h2>
 
   <div class="grid">
     <div class="col-12">
-      <form [formGroup]="chatProviderForm" class="flex flex-wrap gap-4">
+      <form [formGroup]="llmProviderForm" class="flex flex-wrap gap-4">
         <div class="field w-full">
           <label for="name" class="block font-medium mb-2">Provider Name <span class="text-red-500">*</span></label>
           <input
@@ -12,9 +12,9 @@
             pInputText
             formControlName="name"
             class="w-full"
-            [class.ng-invalid]="chatProviderForm.get('name')?.invalid && chatProviderForm.get('name')?.touched"
+            [class.ng-invalid]="llmProviderForm.get('name')?.invalid && llmProviderForm.get('name')?.touched"
           />
-          <small *ngIf="chatProviderForm.get('name')?.invalid && chatProviderForm.get('name')?.touched" class="p-error">
+          <small *ngIf="llmProviderForm.get('name')?.invalid && llmProviderForm.get('name')?.touched" class="p-error">
             Provider name is required and must be at least 3 characters
           </small>
         </div>
@@ -23,7 +23,7 @@
           <label for="apiBaseUrl" class="block font-medium mb-2">
             <span> API Base URL </span>
             <span class="text-red-500">*</span>
-            <app-info-help infoMdFile="chat-provider-url"></app-info-help>
+            <app-info-help infoMdFile="llm-provider-url"></app-info-help>
           </label>
           <input
             id="apiBaseUrl"
@@ -32,11 +32,11 @@
             formControlName="apiBaseUrl"
             class="w-full"
             [class.ng-invalid]="
-              chatProviderForm.get('apiBaseUrl')?.invalid && chatProviderForm.get('apiBaseUrl')?.touched
+              llmProviderForm.get('apiBaseUrl')?.invalid && llmProviderForm.get('apiBaseUrl')?.touched
             "
           />
           <small
-            *ngIf="chatProviderForm.get('apiBaseUrl')?.invalid && chatProviderForm.get('apiBaseUrl')?.touched"
+            *ngIf="llmProviderForm.get('apiBaseUrl')?.invalid && llmProviderForm.get('apiBaseUrl')?.touched"
             class="p-error"
           >
             Valid API Base URL is required (must start with http:// or https://)
@@ -51,10 +51,10 @@
             pInputText
             formControlName="apiKey"
             class="w-full"
-            [class.ng-invalid]="chatProviderForm.get('apiKey')?.invalid && chatProviderForm.get('apiKey')?.touched"
+            [class.ng-invalid]="llmProviderForm.get('apiKey')?.invalid && llmProviderForm.get('apiKey')?.touched"
           />
           <small
-            *ngIf="chatProviderForm.get('apiKey')?.invalid && chatProviderForm.get('apiKey')?.touched"
+            *ngIf="llmProviderForm.get('apiKey')?.invalid && llmProviderForm.get('apiKey')?.touched"
             class="p-error"
           >
             API Key is required
@@ -66,7 +66,7 @@
             label="Fetch Models"
             icon="pi pi-sync"
             (onClick)="fetchModels()"
-            [disabled]="chatProviderForm.invalid || isLoadingModels()"
+            [disabled]="llmProviderForm.invalid || isLoadingModels()"
             [loading]="isLoadingModels()"
           ></p-button>
         </div>
@@ -118,11 +118,11 @@
 
           <div class="flex w-full justify-end mt-4">
             <p-button
-              label="Save Chat Provider"
+              label="Save LLM Provider"
               icon="pi pi-save"
               severity="success"
               (onClick)="save()"
-              [disabled]="chatProviderForm.invalid || selectedModels().length === 0 || isSaving()"
+              [disabled]="llmProviderForm.invalid || selectedModels().length === 0 || isSaving()"
               [loading]="isSaving()"
             ></p-button>
           </div>
