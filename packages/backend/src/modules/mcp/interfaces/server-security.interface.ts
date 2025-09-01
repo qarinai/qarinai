@@ -1,6 +1,6 @@
 interface IMcpServerSecurityBase {
   isSecure: boolean;
-  securityType: 'none' | 'basic' | 'bearer';
+  securityType: 'none' | 'basic' | 'bearer' | 'apiKey';
 }
 
 export interface IMcpServerSecurityNone extends IMcpServerSecurityBase {
@@ -36,8 +36,6 @@ export interface IMcpServerSecurityBasic extends IMcpServerSecurityBase {
           };
         };
       };
-  authParamName: string;
-  authParamIn: 'header' | 'query';
 }
 
 export interface IMcpServerSecurityBearer extends IMcpServerSecurityBase {
@@ -59,11 +57,33 @@ export interface IMcpServerSecurityBearer extends IMcpServerSecurityBase {
           };
         };
       };
+}
+
+export interface IMcpServerSecurityApiKey extends IMcpServerSecurityBase {
+  isSecure: true;
+  securityType: 'apiKey';
+  value:
+    | {
+        type: 'static';
+        apiKey: string;
+      }
+    | {
+        type: 'dynamic';
+        fromToolParameters: {
+          apiKey: {
+            name: '__api_key';
+            schema: {
+              type: 'string';
+            };
+          };
+        };
+      };
   authParamName: string;
-  authParamIn: 'header' | 'query';
+  authParamIn: 'header' | 'query' | 'cookie';
 }
 
 export type IMcpServerSecurity =
   | IMcpServerSecurityNone
   | IMcpServerSecurityBasic
-  | IMcpServerSecurityBearer;
+  | IMcpServerSecurityBearer
+  | IMcpServerSecurityApiKey;

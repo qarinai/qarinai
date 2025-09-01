@@ -16,6 +16,10 @@ import { CheckProviderController } from './controllers/check-provider.controller
     LlmProviderService,
     OpenAILlmProviderClientService,
   ],
-  exports: [LlmProviderService, LlmProviderModelService],
+  exports: [
+    LlmProviderService,
+    LlmProviderModelService,
+    OpenAILlmProviderClientService,
+  ],
 })
 export class LlmProviderModule {}

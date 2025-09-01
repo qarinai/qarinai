@@ -1,22 +1,31 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { pipeline, env } from '@huggingface/transformers';
 import type { FeatureExtractionPipeline } from '@huggingface/transformers/types/pipelines';
 import {
+  Inject,
   Injectable,
   Logger,
   OnApplicationShutdown,
-  OnModuleInit,
 } from '@nestjs/common';
 import * as fs from 'fs';
+import { OpenAILlmProviderClientService } from 'src/modules/llm-provider/clients/open-ai-llm-provider-client.service';
+import { LlmProviderModel } from 'src/modules/llm-provider/entities/llm-provider-model.entity';
+import { LlmProviderModelService } from 'src/modules/llm-provider/services/llm-provider-model.service';
+import { SettingKey } from 'src/modules/settings/enums/setting-key.enum';
+import { SettingService } from 'src/modules/settings/services/setting.service';
 
 @Injectable()
-export class EmbeddingsService implements OnModuleInit, OnApplicationShutdown {
+export class EmbeddingsService implements OnApplicationShutdown {
   private logger = new Logger('EmbeddingsService');
   private embeddingsExtractor: FeatureExtractionPipeline;
 
-  async onModuleInit() {
-    await this.loadEmbeddingsExtractor();
-  }
+  @Inject()
+  private readonly settingsService: SettingService;
+
+  @Inject()
+  private readonly llmProviderModelService: LlmProviderModelService;
+
+  @Inject()
+  private readonly providerClientService: OpenAILlmProviderClientService;
 
   async onApplicationShutdown(signal?: string) {
     this.logger.log(`Application shutdown signal received: ${signal}`);
@@ -49,11 +58,51 @@ export class EmbeddingsService implements OnModuleInit, OnApplicationShutdown {
   }
 
   async generateEmbeddings(content: string) {
+    const modelSetting = await this.settingsService.getSetting(
+      SettingKey.DefaultEmbeddingModel,
+    );
+
+    if (!modelSetting) {
+      await this.loadEmbeddingsExtractor();
+      return this.generateEmbeddingsFromLocalModel(content);
+    }
+
+    const model = await this.llmProviderModelService.getModelById(
+      modelSetting.value,
+      ['provider', 'provider.apiKey'],
+    );
+    if (!model) {
+      this.logger.warn(
+        `Default embedding model with id ${modelSetting.value} not found. Falling back to local model.`,
+      );
+      return this.generateEmbeddingsFromLocalModel(content);
+    }
+
+    return this.generateEmbeddingsFromOpenAI(content, model);
+  }
+
+  private async generateEmbeddingsFromLocalModel(content: string) {
+    if (!this.embeddingsExtractor) {
+      await this.loadEmbeddingsExtractor();
+    }
     const tensor = await this.embeddingsExtractor(content, {
       pooling: 'mean',
       normalize: true,
     });
 
     return tensor.tolist()[0] as number[];
+  }
+
+  private async generateEmbeddingsFromOpenAI(
+    content: string,
+    model: LlmProviderModel,
+  ) {
+    const client = await this.providerClientService.with(model.provider);
+    const response = await client.embeddings.create({
+      model: model.name,
+      input: content,
+    });
+
+    return response.data[0].embedding;
   }
 }

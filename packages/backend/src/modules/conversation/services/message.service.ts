@@ -66,7 +66,7 @@ export class MessageService {
       await this.agentService.getMcpServersModelToolsByAgentId(
         conversation.agent.id,
       );
-    const completionTools = this.getChatComletionsTools(availableTools);
+    const completionTools = this.getChatCompletionsTools(availableTools);
 
     let shouldReiterate = false;
     let toolCalls: Record<number, ChatCompletionChunk.Choice.Delta.ToolCall> =
@@ -133,7 +133,12 @@ export class MessageService {
 
         if (Object.entries(toolCalls).length > 0) {
           conversation.messages.push(assistantMessage);
-          await this.getToolCallResult(toolCalls[0], conversation, model);
+          await this.getToolCallResult(
+            toolCalls[0],
+            conversation,
+            model,
+            body.additionalToolParameters,
+          );
 
           shouldReiterate = true;
 
@@ -255,7 +260,7 @@ export class MessageService {
     }
   }
 
-  private getChatComletionsTools(
+  private getChatCompletionsTools(
     availableTools: { name: string; description: string; inputSchema: any }[],
   ) {
     return availableTools.map((tool) => ({
@@ -330,10 +335,17 @@ export class MessageService {
     toolCall: ChatCompletionChunk.Choice.Delta.ToolCall,
     conversation: Conversation,
     model: LlmProviderModel,
+    additionalToolParameters?: Record<string, string>,
   ) {
     const result = await this.agentService.callToolFromAgent(
       conversation.agent,
-      toolCall.function,
+      {
+        ...toolCall.function,
+        arguments: {
+          ...JSON.parse(toolCall.function?.arguments || '{}'),
+          ...additionalToolParameters,
+        },
+      },
     );
 
     const toolMessage = await this.repo.save(
@@ -348,6 +360,8 @@ export class MessageService {
         role: 'tool',
         additionalData: {
           tool_call_id: toolCall.id,
+          tool_input: toolCall.function?.arguments,
+          tool_name: toolCall.function?.name,
         },
       }),
     );

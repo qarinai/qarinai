@@ -14,7 +14,7 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "prebuild:prod": "rm -rf dist",
     "build:prod": "ng build --configuration production",

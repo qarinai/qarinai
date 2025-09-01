@@ -62,9 +62,9 @@ export class AppMenu {
             }
           },
           {
-            label: 'Agents',
-            icon: 'pi pi-sparkles',
-            routerLink: ['/pages/agents'],
+            label: 'Vector Stores',
+            icon: 'pi pi-database',
+            routerLink: ['/pages/vector-stores'],
             routerLinkActiveOptions: {
               paths: 'subset',
               queryParams: 'ignored',
@@ -73,9 +73,9 @@ export class AppMenu {
             }
           },
           {
-            label: 'Vector Stores',
-            icon: 'pi pi-database',
-            routerLink: ['/pages/vector-stores'],
+            label: 'Agents',
+            icon: 'pi pi-sparkles',
+            routerLink: ['/pages/agents'],
             routerLinkActiveOptions: {
               paths: 'subset',
               queryParams: 'ignored',

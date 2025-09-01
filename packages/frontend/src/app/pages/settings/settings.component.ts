@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { SettingKey } from './_interfaces/settings.interface';
 import { LlmProviderBackendService } from '../llm-providers/_services/llm-provider-backend.service';
 import { ILlmProvider } from '../llm-providers/_interfaces/llm-provider.interface';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-settings',
@@ -18,6 +19,7 @@ export class SettingsComponent implements OnInit {
   settingBackendService = inject(SettingsBackendService);
   llmProviderBackendService = inject(LlmProviderBackendService);
   fb = inject(FormBuilder);
+  messageService = inject(MessageService);
 
   llmProviders = signal<ILlmProvider[]>([]);
 
@@ -28,8 +30,8 @@ export class SettingsComponent implements OnInit {
 
   settingsForm = this.fb.group({
     defaultLlmProvider: [''],
-    defaultChatModel: ['']
-    // defaultEmbeddingModel: ['']
+    defaultLlmModel: [''],
+    defaultEmbeddingModel: ['']
   });
 
   ngOnInit(): void {
@@ -44,19 +46,33 @@ export class SettingsComponent implements OnInit {
         value: this.settingsForm.value.defaultLlmProvider || ''
       },
       {
-        key: SettingKey.DefaultChatModel,
-        value: this.settingsForm.value.defaultChatModel || ''
+        key: SettingKey.DefaultLlmModel,
+        value: this.settingsForm.value.defaultLlmModel || ''
+      },
+      {
+        key: SettingKey.DefaultEmbeddingModel,
+        value: this.settingsForm.value.defaultEmbeddingModel || ''
       }
-      // {
-      //   key: 'default_embedding_model',
-      //   value: this.settingsForm.value.defaultEmbeddingModel || ''
-      // }
     ].filter((setting) => setting.value);
 
     settingsToUpdate.forEach((setting) => {
       this.settingBackendService.setSetting(setting).subscribe({
-        next: () => console.log(`Setting ${setting.key} updated successfully`),
-        error: (err) => console.error(`Error updating setting ${setting.key}:`, err)
+        next: () => {
+          console.log(`Setting ${setting.key} updated successfully`);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Settings Updated',
+            detail: `Setting ${setting.key} updated successfully`
+          });
+        },
+        error: (err) => {
+          console.error(`Error updating setting ${setting.key}:`, err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Failed to update setting ${setting.key}`
+          });
+        }
       });
     });
   }
@@ -67,8 +83,8 @@ export class SettingsComponent implements OnInit {
       this.settingsLoading.set(false);
       const formValues = {
         defaultLlmProvider: settings.find((s) => s.key === SettingKey.DefaultLlmProvider)?.value || '',
-        defaultChatModel: settings.find((s) => s.key === SettingKey.DefaultChatModel)?.value || ''
-        // defaultEmbeddingModel: settings.find(s => s.key === 'default_embedding_model')?.value || ''
+        defaultLlmModel: settings.find((s) => s.key === SettingKey.DefaultLlmModel)?.value || '',
+        defaultEmbeddingModel: settings.find((s) => s.key === SettingKey.DefaultEmbeddingModel)?.value || ''
       };
       this.settingsForm.patchValue(formValues);
     });

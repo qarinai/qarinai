@@ -1,6 +1,6 @@
 export enum SettingKey {
   DefaultLlmProvider = 'default_llm_provider',
-  DefaultChatModel = 'default_chat_model',
+  DefaultLlmModel = 'default_llm_model',
   DefaultEmbeddingModel = 'default_embedding_model'
 }
 

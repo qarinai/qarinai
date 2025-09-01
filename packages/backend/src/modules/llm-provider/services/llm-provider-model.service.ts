@@ -9,9 +9,13 @@ export class LlmProviderModelService {
   @InjectRepository(LlmProviderModel)
   private readonly llmProviderModelRepository: Repository<LlmProviderModel>;
 
-  async getModelById(id: string): Promise<LlmProviderModel | null> {
+  async getModelById(
+    id: string,
+    relations: string[] = [],
+  ): Promise<LlmProviderModel | null> {
     const model = await this.llmProviderModelRepository.findOne({
       where: { id },
+      relations,
     });
 
     if (!model) {

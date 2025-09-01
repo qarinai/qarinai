@@ -20,7 +20,24 @@
     <div class="input-field flex flex-col gap-1">
       <label for="defaultChatModel">Default Chat Model</label>
       <p-select
-        formControlName="defaultChatModel"
+        formControlName="defaultLlmModel"
+        id="defaultChatModel"
+        placeholder="Select a model"
+        class="w-full"
+        [options]="llmProviders()"
+        [group]="true"
+        optionLabel="name"
+        optionValue="id"
+        optionGroupLabel="name"
+        optionGroupChildren="models"
+        [loading]="allLoading()"
+      ></p-select>
+    </div>
+
+    <div class="input-field flex flex-col gap-1">
+      <label for="defaultChatModel">Default Embeddings Model</label>
+      <p-select
+        formControlName="defaultEmbeddingModel"
         id="defaultChatModel"
         placeholder="Select a model"
         class="w-full"

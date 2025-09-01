@@ -254,7 +254,7 @@ export class VectorStoreSourceService {
     context: string = '',
   ): Promise<string | null> {
     const defaultModelSetting = await this.settingService.getSetting(
-      SettingKey.DefaultChatModel,
+      SettingKey.DefaultLlmModel,
     );
     if (!defaultModelSetting) {
       return null;

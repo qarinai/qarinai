@@ -39,9 +39,16 @@
       <td>{{ provider.name }}</td>
       <td>{{ provider.apiBaseUrl }}</td>
       <td>
-        @for (model of provider.models; track model.name) {
-          <p-tag [value]="model.name" class="mr-1"></p-tag>
-        }
+        <div class="flex flex-wrap items-center gap-1">
+          @for (model of provider.models.slice(0, 3); track model.name) {
+            <p-tag [value]="model.name" class="mr-1"></p-tag>
+          }
+          @if (provider.models.length > 3) {
+            <span class="text-xs font-medium text-primary-300 bg-primary-500/15 px-2 py-1 rounded-md">
+              +{{ provider.models.length - 3 }} more
+            </span>
+          }
+        </div>
       </td>
       <td>
         <p-button icon="pi pi-pencil" outlined class="mr-2"></p-button>

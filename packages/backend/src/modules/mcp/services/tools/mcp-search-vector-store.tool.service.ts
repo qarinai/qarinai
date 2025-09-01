@@ -34,10 +34,12 @@ export class McpSearchVectorStoreToolService implements IToolService {
       toolData.storeId,
     );
 
-    return result.map((item) => ({
-      ...item,
-      source: undefined,
-    }));
+    return result
+      .map(
+        (item) =>
+          `Score: ${item.score}\nContent: ${item.content}\nSource: ${JSON.stringify(item.source.metadata)}`,
+      )
+      .join('\n\n---\n\n');
   }
 
   async buildToolInputSchema(

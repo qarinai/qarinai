@@ -1,5 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class SendMessageParamsDto {
   @ApiProperty()
@@ -23,4 +29,9 @@ export class SendMessageBodyDto {
   @IsNotEmpty()
   @IsString()
   content: string;
+
+  @ApiPropertyOptional({ type: 'object', additionalProperties: true })
+  @IsOptional()
+  @IsObject()
+  additionalToolParameters?: Record<string, any>;
 }

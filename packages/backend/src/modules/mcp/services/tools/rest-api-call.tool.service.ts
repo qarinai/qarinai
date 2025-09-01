@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Inject, Injectable } from '@nestjs/common';
 import { IToolService } from '../../interfaces/tool-service.interface';
 import { ToolRestApiCallDataDefinition } from '../../interfaces/mcp.interfaces';
@@ -49,7 +47,10 @@ export class RestApiCallToolService implements IToolService {
           url.includes(`{${paramName}}`) &&
           callParams[paramName]
         ) {
-          fullUrl = fullUrl.replace(`{${paramName}}`, callParams[paramName]);
+          fullUrl = fullUrl.replace(
+            `{${paramName}}`,
+            callParams[paramName] as string,
+          );
         }
       }
     }
@@ -61,7 +62,7 @@ export class RestApiCallToolService implements IToolService {
             throw new Error(`Missing required query parameter: ${key}`);
           }
           return callParams[key]
-            ? `${key}=${encodeURIComponent(callParams[key] || '')}`
+            ? `${key}=${encodeURIComponent((callParams[key] as string) || '')}`
             : undefined;
         })
         .filter((param) => param !== undefined)
@@ -130,6 +131,37 @@ export class RestApiCallToolService implements IToolService {
             ...clientConfig.headers,
             Authorization: `Bearer ${decryptedToken}`,
           };
+        } else if (security.securityType === 'apiKey') {
+          const apiKey =
+            security.value.type === 'static'
+              ? security.value.apiKey
+              : (callParams[
+                  security.value.fromToolParameters.apiKey.name
+                ] as string);
+          const decryptedApiKey = await this.getSecureValueAttempt(apiKey);
+          if (security.authParamIn === 'header') {
+            clientConfig.headers = {
+              ...clientConfig.headers,
+              [security.authParamName]: decryptedApiKey,
+            };
+          } else if (security.authParamIn === 'query') {
+            const separator = clientConfig.url.includes('?') ? '&' : '?';
+            clientConfig.url += `${separator}${security.authParamName}=${encodeURIComponent(
+              decryptedApiKey,
+            )}`;
+          } else if (security.authParamIn === 'cookie') {
+            const existingCookie =
+              clientConfig.headers?.['Cookie'] ||
+              clientConfig.headers?.['cookie'] ||
+              '';
+            const cookieString = `${security.authParamName}=${decryptedApiKey}`;
+            clientConfig.headers = {
+              ...clientConfig.headers,
+              Cookie: existingCookie
+                ? `${existingCookie}; ${cookieString}`
+                : cookieString,
+            };
+          }
         }
       }
     }

@@ -49,7 +49,7 @@ export class StatsComponent implements OnInit {
 
   private checkSettings() {
     this.settingService.listAllSettings().subscribe((settings) => {
-      if (!settings.some((setting) => setting.key === SettingKey.DefaultChatModel)) {
+      if (!settings.some((setting) => setting.key === SettingKey.DefaultLlmModel)) {
         this.messageService.add({
           severity: 'warn',
           summary: 'Settings Warning',
